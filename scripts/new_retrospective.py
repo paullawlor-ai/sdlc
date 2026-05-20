@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+"""Create a new retrospective document for the current iteration.
+
+Usage:
+  python sdlc/scripts/new_retrospective.py 1               # iteration 1
+  python sdlc/scripts/new_retrospective.py 2 "Phase 2 MVP" # with custom name
+"""
+import os
+import re
+import sys
+from datetime import date
+from _paths import FRAMEWORK_ROOT, artifacts_root
+
+# Retrospectives are project artifacts because they capture what happened during
+# a specific iteration of the host project. The reusable document shape lives in
+# the framework template directory.
+TEMPLATE = FRAMEWORK_ROOT / "templates" / "documents" / "retrospective.md"
+RETRO_DIR = artifacts_root() / "retrospectives"
+
+
+def next_iter_num() -> int:
+    """Infer the next iteration number from existing retrospective filenames.
+
+    The current CLI asks the caller to provide an iteration number, but this
+    helper is kept for future automation and for readers to see the filename
+    convention: YYYY-MM-DD-iter-N.md.
+    """
+    if not os.path.isdir(RETRO_DIR):
+        return 1
+    nums = []
+    for fn in os.listdir(RETRO_DIR):
+        m = re.search(r"-iter-(\d+)\.md$", fn)
+        if m:
+            nums.append(int(m.group(1)))
+    return (max(nums) + 1) if nums else 1
+
+
+def main():
+    # Retrospectives are tied to an iteration, so the first argument must be a
+    # number. A free-form name is optional and becomes the title inside the file.
+    if len(sys.argv) < 2:
+        print(__doc__)
+        sys.exit(1)
+
+    try:
+        iter_num = int(sys.argv[1])
+    except ValueError:
+        print(f"Error: first argument must be the iteration number (integer), got: {sys.argv[1]}")
+        sys.exit(1)
+
+    name = " ".join(sys.argv[2:]) if len(sys.argv) > 2 else f"Iteration {iter_num}"
+    today = date.today().isoformat()
+    filename = f"{today}-iter-{iter_num}.md"
+
+    # Ensure the artifact folder exists before writing the retrospective.
+    os.makedirs(RETRO_DIR, exist_ok=True)
+    out = os.path.join(RETRO_DIR, filename)
+
+    # Populate the template with the iteration metadata that should not need
+    # manual editing. The retrospective content itself remains for the team or
+    # agent to fill in honestly after the iteration.
+    with open(TEMPLATE, "r", encoding="utf-8") as f:
+        body = f.read()
+
+    body = body.replace("[Iteration Name / Date]", name)
+    body = body.replace("Iteration**: [N]", f"Iteration**: {iter_num}")
+    body = body.replace("`sdlc_artifacts/retrospectives/[YYYY-MM-DD]-iter-[N].md`",
+                        f"`sdlc_artifacts/retrospectives/{filename}`")
+    with open(out, "w", encoding="utf-8") as f:
+        f.write(body)
+
+    # Echo the created path and iteration identity for easy handoff notes.
+    print(f"Created: {out}")
+    print(f"Iteration: {iter_num}")
+    print(f"Name: {name}")
+
+
+if __name__ == "__main__":
+    main()

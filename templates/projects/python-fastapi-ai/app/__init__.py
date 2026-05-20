@@ -1,0 +1,2 @@
+"""AI-infused FastAPI service."""
+

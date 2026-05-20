@@ -1,0 +1,17 @@
+---
+alwaysApply: true
+---
+
+# Agentic SDLC Framework
+
+This project uses the Agentic SDLC Framework in `sdlc/`.
+
+Before significant work:
+
+- Read `sdlc_artifacts/STATE.md` when it exists.
+- Read `sdlc_artifacts/context.md` when it exists.
+- Use the relevant prompt in `sdlc/prompts/`.
+
+The Implementation Gate is defined in `implementation-gate.mdc` and is mandatory. Do not edit product code without an approved change proposal — see that file for the exact procedure.
+
+Do not edit `sdlc/` unless the task is to maintain the framework itself.

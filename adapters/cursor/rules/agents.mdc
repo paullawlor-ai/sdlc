@@ -1,0 +1,151 @@
+---
+description: Agent orchestration rules for coordinating specialized agents
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Agent Orchestration Rules
+
+This project uses specialized agents for different SDLC tasks. The orchestrator agent coordinates their work.
+
+## Available Agents
+
+| Agent | File | Purpose |
+|-------|------|---------|
+| Orchestrator | `sdlc/agents/orchestrator.md` | Coordinates all agents, manages SDLC flow |
+| Requirements Analyst | `sdlc/agents/requirements-analyst.md` | Clarifies and documents requirements |
+| Architect | `sdlc/agents/architect.md` | Designs systems, creates ADRs |
+| Developer | `sdlc/agents/developer.md` | Implements code, creates change proposals |
+| Tester | `sdlc/agents/tester.md` | Creates test plans, writes tests |
+| Security Reviewer | `sdlc/agents/security-reviewer.md` | Reviews for security issues |
+| DevOps | `sdlc/agents/devops.md` | Handles CI/CD, deployment |
+| Docs Writer | `sdlc/agents/docs-writer.md` | Maintains documentation |
+| Web Designer/Engineer | `sdlc/agents/web-designer.md` | Designs and implements modern, functional web interfaces |
+
+## Invoking Agents
+
+### Via Bootstrap (New Project)
+```
+Read sdlc/prompts/bootstrap.md and begin
+```
+
+### Via Continue (Existing Project)
+```
+Read sdlc/prompts/continue.md and resume
+```
+
+### Direct Agent Invocation
+```
+Act as the [Agent Name] agent. Read sdlc/agents/[agent-file].md and [task description].
+```
+
+Examples:
+```
+Act as the Security Reviewer agent. Read sdlc/agents/security-reviewer.md and review the current changes.
+```
+```
+Act as the Architect agent. Read sdlc/agents/architect.md and create an ADR for choosing a database.
+```
+
+## Agent Handoff Protocol
+
+When completing a task and handing off to another agent:
+
+1. **Complete current outputs**: Finish all documents/code for current phase
+2. **Save artifacts**: Ensure all files are saved
+3. **Summarize**: Briefly describe what was done
+4. **Identify next step**: State what should happen next
+5. **Invoke next agent**: Or return control to orchestrator
+
+Example handoff:
+```
+## Handoff Summary
+- Completed: Requirements analysis for user authentication
+- Artifacts: sdlc_artifacts/requirements/REQ-0001-user-auth.md
+- Next step: Architecture design for auth system
+- Recommended agent: Architect
+```
+
+## Orchestrator Responsibilities
+
+The Orchestrator:
+1. Reads project state (`sdlc_artifacts/changes/`, `sdlc_artifacts/requirements/`, `sdlc_artifacts/reviews/`, `sdlc_artifacts/STATE.md`)
+2. Determines current SDLC phase
+3. Identifies next required task
+4. Invokes appropriate specialized agent
+5. Monitors for completion
+6. Manages phase transitions
+
+## State Detection
+
+The orchestrator determines project state by reading:
+
+| Artifact | Location | Indicates |
+|----------|----------|-----------|
+| Requirements | `sdlc_artifacts/requirements/` | Requirements phase complete |
+| ADRs | `sdlc_artifacts/decisions/accepted/` | Design decisions made |
+| Change proposals | `sdlc_artifacts/changes/` | Implementation in progress |
+| Reviews | `sdlc_artifacts/reviews/` | Review status |
+| Test plans | `sdlc_artifacts/` | Testing defined |
+| Runbooks | `sdlc_artifacts/runbooks/` | Deployment ready |
+
+## Phase Transitions
+
+```
+Requirements -> Design -> Implementation -> Testing -> Security Review -> Deployment -> Iterate
+      ^                                                                              |
+      +------------------------------------------------------------------------------+
+```
+
+Transition triggers:
+- **Requirements -> Design**: All requirements documented and approved
+- **Design -> Implementation**: ADRs accepted, design approved
+- **Implementation -> Testing**: Change approved, code complete
+- **Testing -> Security Review**: Tests passing
+- **Security Review -> Deployment**: No must-fix findings
+- **Deployment -> Iterate**: Deployment complete
+- **Iterate -> Requirements**: New iteration planned
+
+## Approval Gates
+
+These points require human approval before proceeding:
+
+1. **Change Proposals**: Before implementation begins
+2. **ADRs**: Before design is finalized
+3. **Security Reviews**: Before deployment (if must-fix items exist)
+
+When reaching an approval gate:
+```
+[PAUSE] APPROVAL REQUIRED
+
+Waiting for approval on: [document name]
+Location: [file path]
+Action needed: Update status to "Approved" to continue
+
+Current status: Proposed
+```
+
+## Parallel Agent Work
+
+Some agents can work in parallel:
+- Tester + Security Reviewer (both review implementation)
+- Docs Writer (can run alongside any phase)
+- Web Designer/Engineer (can run alongside design, implementation, and testing for browser UI work)
+
+The orchestrator may spawn parallel agents when appropriate.
+
+## Error Handling
+
+If an agent encounters a blocker:
+1. Document the blocker clearly
+2. Return control to orchestrator
+3. Orchestrator will determine resolution path
+
+Example:
+```
+## Blocker Encountered
+- Issue: Missing API specification for external service
+- Needed by: Developer agent for integration
+- Suggested resolution: Architect agent to create API contract
+- Returning control to: Orchestrator
+```

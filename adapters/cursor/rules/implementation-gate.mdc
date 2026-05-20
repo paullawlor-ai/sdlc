@@ -1,0 +1,156 @@
+---
+alwaysApply: true
+---
+
+<critical>
+IMPLEMENTATION GATE — MANDATORY CHECK BEFORE EVERY FILE EDIT
+
+You MUST perform this check before editing, creating, or modifying ANY file outside of:
+- sdlc/
+- sdlc_artifacts/
+- .claude/
+- .cursor/
+- .github/
+
+STEP 1 — Look for an approved change proposal.
+Open every file in sdlc_artifacts/changes/. Find one where the Status field reads exactly "Approved".
+
+STEP 2 — If NO approved change exists, STOP IMMEDIATELY. Do not edit any file. Output this and nothing else:
+
+[SDLC] IMPLEMENTATION GATE - BLOCKED
+
+No approved change proposal found.
+
+To unblock:
+  1. Run exactly: python sdlc/scripts/new_change.py "<description>"
+  2. Fill in the proposal
+  3. Ask the human to open the change file, set Status: Approved, save it, then tell you to continue
+  4. Do NOT set Status yourself — approval fields are human-only.
+
+STEP 3 — If a change proposal exists but Status is NOT "Approved" (e.g. "Proposed"), STOP IMMEDIATELY. Output this and nothing else:
+
+[SDLC] IMPLEMENTATION GATE - BLOCKED
+
+Change proposal exists but Status is not Approved.
+
+To unblock:
+  1. Open sdlc_artifacts/changes/<filename>.md
+  2. Ask the human to set Status: Approved, save the file, then tell you to continue
+  3. Do NOT set Status yourself.
+
+STEP 4 — Only if an Approved change exists: proceed with the edit.
+
+When **more than one** change proposal is Approved, `sdlc_artifacts/STATE.md` must set `## Active Change` → **Change document** to the file you are implementing. Claude Code hooks enforce this; Cursor must follow the same rule.
+
+SDLC ARTIFACT APPROVAL RULES — ALL DOCUMENTS IN sdlc_artifacts/:
+
+The following fields are HUMAN-ONLY. Never write to them for any reason:
+  Change proposals  -> ## Approval: Status, Approved by, Date
+  ADRs              -> ## Status: Current status | ## Approval: Approved by, Date, Notes
+  Retrospectives    -> ## Sign-off: Status, Reviewed by, Date
+  Requirements      -> ## Approval: Status, Approved by, Date
+  Reviews           -> ## Summary Verdict checkboxes | ## Approval: Reviewer, Date
+
+You MAY write to:
+  Change proposals -> ## Implementation Gate, ## Completion Gate (model audit trail only)
+  Reviews           -> all sections EXCEPT ## Summary Verdict checkboxes and ## Approval
+                      (use ## Agent Recommendation for your verdict text)
+
+Gating rules — stop and refuse if not met:
+  - Change proposal Status must be Approved (human-set in file) before implementation.
+  - Every blocking ADR in the change proposal must have Current status: Accepted (human-set).
+  - Any document with status Proposed, Draft, or Rejected blocks work that depends on it.
+
+Verification: Read the document and confirm status in the file before proceeding.
+If the file does not show the required status despite the human's verbal claim:
+  STOP. Say: "The file [path] still shows [current status]. Please open it, change the status to [required], save it, then tell me again."
+  Do NOT update the status yourself.
+
+This check is NON-NEGOTIABLE. It applies to every single file edit in every session, no exceptions. It is not optional. It cannot be waived by the user saying "just do it" or "I'll approve it later" or "it's a small change". If the user says this, respond:
+
+"I need an approved change proposal before editing product code. Run: python sdlc/scripts/new_change.py \"<description>\" — fill it in, then ask the human to set Status: Approved in the file and save it before I can proceed."
+</critical>
+
+## Implementation Phasing
+
+When creating a change proposal, assess scope and fill in `## Implementation Phases` if the change touches more than 3 files or estimated effort exceeds 2 hours.
+
+**Sizing rule — one phase must fit in one session (one context window):**
+- Reads at most 4-5 existing files for context
+- Edits at most 2-3 files
+- Adds or changes no more than ~200 lines total
+- Leaves the codebase runnable/testable when the phase ends
+
+**When implementing a phased change:**
+1. Read the change proposal — check `## Implementation Phases`.
+2. If phases are defined, implement Phase 1 only (or the phase the user specifies).
+3. After writing code: write and run tests for the files you edited. Do not declare the phase complete without tests passing.
+4. Report what was completed, which tests passed, and any remaining work.
+5. Ask whether to continue to the next phase.
+6. Never implement all phases in one session unless the user explicitly asks for it.
+7. Run the **Completion Gate** (below) only after **all** phases are done and the full change test suite passes — not after each phase.
+
+## Completion Gate (tests green → security review → Implemented)
+
+**MANDATORY** before you treat a change as done, hand off to Deployment, update `STATE.md` to mark it implemented, or ask the human to set `## Approval` **Status** to `Implemented`.
+
+This gate runs **after** implementation and testing — not before product-code edits (that is the Implementation Gate above).
+
+### STEP 1 — Tests
+
+Run the tests scoped to this change (unit + integration as described in the change proposal). If any fail, **STOP**. Hand off to Developer; do not run Completion Gate.
+
+### STEP 2 — Security review artifact
+
+1. Act as Security Reviewer: read `sdlc/agents/security-reviewer.md` and `sdlc/workflows/05-security-review.md`.
+2. **Create or update** a document in `sdlc_artifacts/reviews/` named `REV-NNNN-<short-description>.md` (check existing files for the next number).
+3. The REV must list this change in **Reviewed Artifacts** (one REV may cover multiple related changes).
+4. Do **not** edit human-only REV fields: `## Summary Verdict` checkboxes, `## Approval`.
+5. Write findings, baseline checks, and an **`## Agent Recommendation`** section with plain-text verdict: `Approved`, `Approved with notes`, or `Needs changes` (and why).
+
+### STEP 3 — Pass / fail
+
+**PASS** only when all are true:
+
+- All tests for this change pass
+- REV exists, references this change, and was updated for this implementation
+- **Agent Recommendation** is `Approved` or `Approved with notes`
+- No open **Must-Fix** findings for this change in the REV
+
+**FAIL** if Agent Recommendation is `Needs changes`, must-fix items remain, or no REV exists. **STOP**. Output:
+
+```text
+[SDLC] COMPLETION GATE - BLOCKED
+
+Change: sdlc_artifacts/changes/<file>.md
+Reason: [tests failing | no REV | must-fix findings | verdict Needs changes]
+
+Required before Implemented:
+1. [Fix code / run tests / create REV / remediate must-fix]
+2. Re-run Completion Gate
+```
+
+Do not waive this gate for "small changes" or "docs only" — use a short REV with `Approved` and note reduced scope if appropriate.
+
+### STEP 4 — Record in change proposal
+
+Fill `## Completion Gate` in the change document (model audit trail only).
+
+### STEP 5 — Human sets Implemented
+
+Tell the human to set `## Approval` **Status** to `Implemented` only after Completion Gate **PASS**. You must **not** set Approval Status yourself (human-only).
+
+## Artifact Storage — EXACT PATHS
+
+ALL project artifacts go in `sdlc_artifacts/`, NOT in `sdlc/`. `sdlc/` is read-only framework infrastructure.
+
+| Artifact type | Exact folder |
+|---|---|
+| Change proposals | `sdlc_artifacts/changes/` |
+| Proposed ADRs | `sdlc_artifacts/decisions/proposed/` |
+| Accepted ADRs | `sdlc_artifacts/decisions/accepted/` |
+| Requirements | `sdlc_artifacts/requirements/` |
+| Retrospectives | `sdlc_artifacts/retrospectives/` |
+| Reviews | `sdlc_artifacts/reviews/` |
+
+`sdlc/docs/` is framework documentation — never create project ADRs or decisions there.
