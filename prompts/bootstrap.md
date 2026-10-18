@@ -146,7 +146,8 @@ Reference the appropriate workflow (prefix with `sdlc/` when embedded):
 5. **Work incrementally**: Small, reviewable changes
 6. **Maintain traceability**: Link requirements -> design -> code -> tests
 7. **Active Change**: When more than one change is Approved, set exactly one in `sdlc_artifacts/STATE.md` before implementing
-8. **Completion Gate**: After tests pass, run security review (REV) and Completion Gate before human sets Status: Implemented
+8. **Completion Gate**: After tests pass, apply the active class/profile policy;
+   when a REV is required, pass it before the human sets Status: Implemented
 
 ---
 

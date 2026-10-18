@@ -4,7 +4,10 @@
 
 The Security Review phase verifies that implementations meet security requirements, follow OWASP guidelines, and implement required controls.
 
-**Completion Gate**: This phase is **required** before a change's Approval **Status** may become `Implemented`. After Testing passes, create or update a REV document, record the result in the change's `## Completion Gate` section, then the human sets **Status: Implemented**. See `.cursor/rules/implementation-gate.mdc` (Completion Gate).
+**Completion Gate**: This phase is required when the effective change class and
+project profile require a security review. After Testing passes, create or
+update a REV document, record the result in the change's `## Completion Gate`
+section, then the human sets **Status: Implemented**.
 
 ## Agent
 

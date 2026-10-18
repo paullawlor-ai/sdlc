@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "framework_version": "0.2.0",
+  "default_profile": "standard",
+  "change_classes": {
+    "trivial": {
+      "description": "Documentation, comments, formatting, or an isolated low-risk correction.",
+      "requires_change": false,
+      "requires_adr": false,
+      "requires_security_review": false
+    },
+    "standard": {
+      "description": "A normal feature, behaviour, configuration, or dependency change.",
+      "requires_change": true,
+      "requires_adr": false,
+      "requires_security_review": true
+    },
+    "high-risk": {
+      "description": "Authentication, authorization, secrets, sensitive data, migrations, architecture, production infrastructure, or AI safety.",
+      "requires_change": true,
+      "requires_adr": true,
+      "requires_security_review": true
+    }
+  },
+  "profiles": {
+    "lite": {
+      "description": "Lightweight evidence for solo and exploratory projects.",
+      "completion_review_for": ["high-risk"]
+    },
+    "standard": {
+      "description": "Recommended approval and completion gates.",
+      "completion_review_for": ["standard", "high-risk"]
+    },
+    "regulated": {
+      "description": "Full evidence and review for audit-sensitive work.",
+      "completion_review_for": ["trivial", "standard", "high-risk"]
+    }
+  },
+  "human_only": {
+    "change": ["approval.status", "approval.approved_by", "approval.date"],
+    "adr": ["status.current_status", "approval.approved_by", "approval.date"],
+    "requirement": ["approval.status", "approval.approved_by", "approval.date"],
+    "review": ["summary_verdict", "approval.reviewer", "approval.date"],
+    "retrospective": ["sign_off.status", "sign_off.reviewed_by", "sign_off.date"]
+  },
+  "security_baselines": {
+    "S0": "All software",
+    "A0": "AI or LLM features",
+    "V0": "Audit or compliance evidence",
+    "C0": "Cloud deployment"
+  },
+  "token_budgets": {
+    "always_on_adapter": 800,
+    "resume_context": 2000,
+    "implementation_context": 4000
+  },
+  "rules": {
+    "R1": "Read STATE.md and context.md before significant or resumed work.",
+    "R2": "Classify the requested change before deciding which gates apply.",
+    "R3": "Standard and high-risk implementation requires a human-approved change proposal.",
+    "R4": "High-risk implementation requires accepted blocking ADRs.",
+    "R5": "When multiple changes are approved, STATE.md must name one Active Change.",
+    "R6": "Assistants never modify human-only approval fields.",
+    "R7": "Completion evidence and security review follow the selected profile and change class.",
+    "R8": "Detailed role, workflow, and security references are loaded only when applicable."
+  }
+}

@@ -105,8 +105,8 @@ Based on state:
 - Invoke Tester agent
 - Create/update test plan
 
-**If tests passed but no REV for the change:**
-- Invoke Security Reviewer agent (Completion Gate — mandatory before Implemented)
+**If tests passed and the effective class/profile requires a REV:**
+- Invoke Security Reviewer agent (Completion Gate requirement is defined by `policy/sdlc-policy.json`)
 - Create or update `sdlc_artifacts/reviews/REV-*.md` and fill `## Completion Gate` in the change doc
 
 **If security review needed:**

@@ -39,6 +39,10 @@ Copy the **`sdlc/`** folder into your project root, then run setup from the proj
    python sdlc/scripts/verify_setup.py
    ```
    This installs Cursor rules, Copilot instructions, Codex `AGENTS.md`, and Claude Code hooks without overwriting anything you already have. It also creates `sdlc_artifacts/STATE.md` when missing. Use `--dry-run` to preview changes without writing files.
+
+   To install only the tools in use, pass `--assistant` one or more times. Setup
+   also creates `sdlc_artifacts/config.json`, where `standard` can be changed to
+   the `lite` or `regulated` policy profile.
 4. Open the project and run:
    ```
    Read sdlc/prompts/onboard.md and begin

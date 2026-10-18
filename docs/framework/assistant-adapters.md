@@ -15,7 +15,9 @@ Keep platform adapters thin:
 - Document templates stay in `templates/`.
 - Security and SDLC references stay in `docs/security/` and `catalogs/`.
 
-This keeps the framework portable and avoids maintaining different versions of the same process for every assistant.
+Adapters are generated from `policy/sdlc-policy.json` by
+`scripts/generate_adapters.py`. This keeps the framework portable and prevents
+different versions of the process from drifting between assistants.
 
 ## Codex
 

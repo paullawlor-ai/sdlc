@@ -151,7 +151,10 @@ Do **not** set Approval **Status** to `Implemented` here. That happens only afte
 
 ### 8. Completion Gate (after Testing)
 
-**Mandatory** before the change is treated as complete or Approval **Status** becomes `Implemented`. See `.cursor/rules/implementation-gate.mdc` (Completion Gate section) and `workflows/05-security-review.md`.
+Required before the change is treated as complete when the effective change
+class and project profile require a completion review. Check with
+`python sdlc/scripts/sdlc.py gate completion`; see
+`workflows/05-security-review.md` when a REV is required.
 
 | Step | Requirement |
 |------|-------------|

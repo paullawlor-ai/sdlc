@@ -5,7 +5,14 @@
 - **ADRs**: 
 - **Commits / PR**: 
 
+## Agent Recommendation
+
+<!-- Agent writes one of: Approved | Approved with notes | Needs changes -->
+- **Recommendation**:
+- **Rationale**:
+
 ## Summary Verdict
+<!-- HUMAN-ONLY: the reviewer checks one verdict after reading the recommendation. -->
 - [ ] Approved
 - [ ] Approved with notes
 - [ ] Needs changes

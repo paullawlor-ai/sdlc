@@ -2,8 +2,14 @@
 from __future__ import annotations
 
 import os
+import json
 import re
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from _artifacts import field_in_section, field_value, validate_artifacts  # noqa: E402
 
 EXCLUDED_PREFIXES = (
     "sdlc" + os.sep,
@@ -19,14 +25,6 @@ EXCLUDED_PREFIXES = (
     ".git" + os.sep,
     ".git/",
 )
-
-STATUS_APPROVED = re.compile(
-    r"(?im)^\s*[-*]?\s*[*_]*status[*_]*\s*[:\|]\s*Approved\b"
-)
-ACTIVE_CHANGE = re.compile(
-    r"(?im)^\s*[-*]?\s*[*_]*change\s+document[*_]*\s*[:\|]\s*(.+)$"
-)
-
 
 def find_project_root() -> Path:
     cwd = Path.cwd().resolve()
@@ -47,8 +45,47 @@ def is_product_code(file_path: str, project_root: Path) -> bool:
     return not any(rel.startswith(prefix) for prefix in EXCLUDED_PREFIXES)
 
 
+def _is_within(path: Path, directory: Path) -> bool:
+    """Return whether a resolved path is contained by a resolved directory."""
+    try:
+        path.resolve().relative_to(directory.resolve())
+        return True
+    except (OSError, ValueError):
+        return False
+
+
 def artifacts_dir(project_root: Path) -> Path:
     return project_root / "sdlc_artifacts"
+
+
+def effective_policy(project_root: Path) -> tuple[str, str, dict]:
+    """Return active change class, profile, and canonical policy data."""
+    framework = project_root / "sdlc"
+    if not (framework / "policy" / "sdlc-policy.json").is_file():
+        framework = Path(__file__).resolve().parents[2]
+    policy_path = framework / "policy" / "sdlc-policy.json"
+    try:
+        policy = json.loads(policy_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        # A missing policy must not make a required gate less restrictive.
+        return "standard", "standard", {}
+    profile = policy.get("default_profile", "standard")
+    config_path = artifacts_dir(project_root) / "config.json"
+    try:
+        configured = json.loads(config_path.read_text(encoding="utf-8")).get("profile")
+        if configured in policy.get("profiles", {}):
+            profile = configured
+    except (OSError, json.JSONDecodeError):
+        pass
+    change_class = "standard"
+    state_path = artifacts_dir(project_root) / "STATE.md"
+    try:
+        selected = field_value(state_path.read_text(encoding="utf-8"), "Change class")
+        if selected in policy.get("change_classes", {}):
+            change_class = selected
+    except OSError:
+        pass
+    return change_class, profile, policy
 
 
 def script_prefix(project_root: Path) -> str:
@@ -68,7 +105,7 @@ def approved_change_files(project_root: Path) -> list[Path]:
             text = md.read_text(encoding="utf-8", errors="ignore")
         except OSError:
             continue
-        if STATUS_APPROVED.search(text):
+        if field_in_section(text, "Approval", "Status") == "Approved":
             found.append(md)
     return found
 
@@ -100,46 +137,46 @@ def active_change_path(project_root: Path) -> Path | None:
         text = state_file.read_text(encoding="utf-8", errors="ignore")
     except OSError:
         return None
-    m = ACTIVE_CHANGE.search(text)
-    if not m:
+    raw_value = field_in_section(text, "Active Change", "Change document")
+    if raw_value is None:
         return None
-    raw = m.group(1).strip().strip("`")
+    raw = raw_value.strip().strip("`")
     if _is_template_placeholder(raw):
         return None
+    changes_dir = artifacts_dir(project_root) / "changes"
     candidate = Path(raw)
-    if candidate.is_file():
-        return candidate.resolve()
-    # Allow filename only
-    by_name = artifacts_dir(project_root) / "changes" / candidate.name
-    if by_name.is_file():
-        return by_name.resolve()
-    # Allow path relative to project root
-    rel = project_root / raw
-    if rel.is_file():
-        return rel.resolve()
+    if candidate.is_absolute():
+        candidates = [candidate]
+    elif candidate.parent == Path("."):
+        candidates = [changes_dir / candidate.name]
+    else:
+        candidates = [project_root / candidate]
+    for possible in candidates:
+        try:
+            resolved = possible.resolve()
+        except OSError:
+            continue
+        if _is_within(resolved, changes_dir) and resolved.is_file():
+            return resolved
     return None
 
 
-def resolve_gate_changes(project_root: Path) -> tuple[list[Path], str | None]:
+def resolve_gate_changes(
+    project_root: Path,
+) -> tuple[list[Path], tuple[str, str] | None]:
     """Return approved changes that satisfy active-change scoping.
 
     Returns (changes, error_message). error_message is set when gate should block.
     """
     approved = approved_change_files(project_root)
-    if not approved:
-        return [], None
-
     active = active_change_path(project_root)
     if active is not None:
-        if not active.is_file():
+        approved_resolved = {path.resolve() for path in approved}
+        if active not in approved_resolved:
             return [], (
                 "active_change_not_approved",
-                f"Active change file from STATE.md was not found:\n  {active}",
-            )
-        if not STATUS_APPROVED.search(active.read_text(encoding="utf-8", errors="ignore")):
-            return [], (
-                "active_change_not_approved",
-                f"The active change in STATE.md is not Approved:\n  {active}",
+                "The active change in STATE.md is not one of the approved "
+                f"change proposals:\n  {active}",
             )
         return [active], None
 
@@ -147,14 +184,17 @@ def resolve_gate_changes(project_root: Path) -> tuple[list[Path], str | None]:
     state_file = artifacts_dir(project_root) / "STATE.md"
     if state_file.is_file():
         text = state_file.read_text(encoding="utf-8", errors="ignore")
-        m = ACTIVE_CHANGE.search(text)
-        if m:
-            raw = m.group(1).strip().strip("`")
+        raw_value = field_in_section(text, "Active Change", "Change document")
+        if raw_value is not None:
+            raw = raw_value.strip().strip("`")
             if not _is_template_placeholder(raw):
                 return [], (
                     "active_change_not_approved",
                     f"STATE.md lists an active change that could not be resolved:\n  {raw}",
                 )
+
+    if not approved:
+        return [], None
 
     if len(approved) == 1:
         return approved, None
@@ -174,10 +214,10 @@ def blocking_adrs_from_change(change_file: Path) -> list[str]:
         text = change_file.read_text(encoding="utf-8", errors="ignore")
     except OSError:
         return []
-    m = re.search(r"(?im)^\s*[-*]?\s*[*_]*blocking\s+adrs?[*_]*\s*[:\|]\s*(.+)$", text)
-    if not m:
+    value = field_in_section(text, "Dependencies", "Blocking ADRs")
+    if value is None:
         return []
-    value = m.group(1).strip()
+    value = value.strip()
     if re.search(r"(?i)\bnone\b", value) or value.startswith("<!--"):
         return []
     return re.findall(r"(?i)(ADR-\d+)", value)
@@ -201,13 +241,10 @@ def adr_is_accepted(adr_file: Path) -> bool:
     try:
         text = adr_file.read_text(encoding="utf-8", errors="ignore")
     except OSError:
-        return True
-    return bool(
-        re.search(
-            r"(?im)^\s*[-*]?\s*[*_]*current\s+status[*_]*\s*[:\|]\s*(Accepted|Approved)",
-            text,
-        )
-    )
+        # Gate-critical evidence must be readable. Failing closed prevents an
+        # unavailable ADR from being treated as accepted.
+        return False
+    return field_in_section(text, "Status", "Current status") in {"Accepted", "Approved"}
 
 
 def check_blocking_adrs(approved: list[Path], project_root: Path) -> list[str]:
@@ -276,6 +313,18 @@ def evaluate_implementation_gate(project_root: Path) -> tuple[bool, str]:
     """Return (allowed, block_message). block_message empty when allowed."""
     if not artifacts_dir(project_root).is_dir():
         return False, gate_block_message(project_root, "not_bootstrapped")
+
+    validation_errors = validate_artifacts(project_root)
+    if validation_errors:
+        detail = "Artifact validation failed:\n" + "".join(
+            f"  - {error}\n" for error in validation_errors
+        )
+        return False, gate_block_message(project_root, "validation", detail)
+
+    change_class, _profile, policy = effective_policy(project_root)
+    requirements = policy.get("change_classes", {}).get(change_class, {})
+    if requirements.get("requires_change") is False:
+        return True, ""
 
     approved, scope_error = resolve_gate_changes(project_root)
     if scope_error:

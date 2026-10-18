@@ -16,7 +16,7 @@ That merges four SDLC hooks with correct paths for your install layout:
 |------|---------|
 | `implementation_gate.py` | Blocks product code edits without an approved change; Active Change when multiple approved; blocking ADRs accepted |
 | `approval_field_guard.py` | Blocks the model from writing human-only approval fields (`Approved`, `Implemented`, etc.) |
-| `bash_gate.py` | Blocks common Bash write patterns to product code |
+| `bash_gate.py` | Applies the gate to common Bash write patterns (best-effort defence in depth) |
 | `session_end_reminder.py` | Reminds Claude to update STATE.md at session end |
 
 **Human approval is required.** The model cannot set `Status: Approved` or `Status: Implemented` — a human must open the change file in an editor, edit the status, and save. Hooks block the model from writing those fields even if the user says "approved" verbally.

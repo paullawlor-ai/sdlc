@@ -13,6 +13,7 @@ import sys
 from pathlib import Path
 from typing import Optional
 from _paths import FRAMEWORK_ROOT, artifacts_root
+from _artifacts import field_value
 
 
 def find_root() -> Path:
@@ -53,8 +54,7 @@ def parse_state(state_path: Path) -> dict:
 
     # The state template uses markdown labels rather than a structured format.
     # Regex extraction is enough for this lightweight, no-dependencies command.
-    phase_match = re.search(r"\*\*Phase\*\*:\s*(.+)", text)
-    phase = phase_match.group(1).strip() if phase_match else "Unknown"
+    phase = field_value(text, "Phase") or "Unknown"
 
     left_off_match = re.search(r"\*\*Left off at\*\*:\s*\n(.+)", text)
     left_off = left_off_match.group(1).strip() if left_off_match else None
@@ -94,9 +94,9 @@ def count_changes(changes_dir: Path) -> dict:
         if f.name.startswith("_") or f.name == "README.md":
             continue
         text = f.read_text(encoding="utf-8", errors="ignore")
-        m = re.search(r"\*\*Status\*\*:\s*(\w+)", text)
-        if m and m.group(1) in counts:
-            counts[m.group(1)] += 1
+        status = field_value(text, "Status")
+        if status in counts:
+            counts[status] += 1
     return counts
 
 
@@ -133,12 +133,12 @@ def check_stale_adrs(decisions_dir: Path) -> list:
     today = date.today()
     for f in accepted.glob("*.md"):
         text = f.read_text(encoding="utf-8", errors="ignore")
-        m = re.search(r"\*\*Review-by date\*\*:\s*(\d{4}-\d{2}-\d{2})", text)
-        if m:
+        review_by = field_value(text, "Review-by date")
+        if review_by:
             try:
-                review_date = date.fromisoformat(m.group(1))
+                review_date = date.fromisoformat(review_by)
                 if review_date < today:
-                    stale.append((f.name, m.group(1)))
+                    stale.append((f.name, review_by))
             except ValueError:
                 pass
     return stale

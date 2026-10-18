@@ -80,14 +80,19 @@ Create `sdlc_artifacts/requirements/existing.md` describing what the project cur
 
 ### Step 5: Reconstruct Architecture Decisions as ADRs
 
-For each major technical decision already made (language, framework, database, auth, API style, deployment target, etc.), create an ADR in `sdlc_artifacts/decisions/accepted/` using the template at `templates/documents/adr.md`.
+For each major technical decision already made (language, framework, database, auth, API style, deployment target, etc.), create a retroactive ADR in `sdlc_artifacts/decisions/proposed/` using the template at `templates/documents/adr.md`.
 
 Rules for retroactive ADRs:
-- Status: **Accepted** (the decision was already made and implemented)
+- Status: **Proposed** until the human reviews the reconstructed record. The
+  decision may already be implemented, but the assistant must not self-accept
+  the new evidence document.
 - Date: use the project's earliest commit date if known; otherwise today's date
 - Do not second-guess decisions - document what was chosen and the likely rationale
-- Flag decisions that look problematic with a note, but still mark them Accepted
+- Flag decisions that look problematic with a note, but leave them Proposed for
+  human review like every other reconstructed ADR
 - Aim for 3-7 ADRs covering the most consequential decisions; don't over-document obvious defaults
+- Present the retroactive ADRs as one review batch. The human accepts each ADR
+  by editing its Current status and moving it to `decisions/accepted/`.
 
 ### Step 5a: Preserve Historical Changes, Fixes, and Remediations
 

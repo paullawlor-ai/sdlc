@@ -1,113 +1,15 @@
 ---
-description: Security rules and OWASP guidelines for secure development
+description: Contextual SDLC security baselines
 globs: ["**/*"]
-alwaysApply: true
+alwaysApply: false
 ---
+<!-- Generated from policy/sdlc-policy.json; do not edit directly. -->
+# Security Baselines
 
-# Security Rules
+- S0 applies to all software.
+- A0 applies to AI or LLM features.
+- V0 applies to audit or compliance evidence.
+- C0 applies to cloud deployment.
 
-All code in this project must follow security best practices. This file summarizes the key security requirements.
-
-## Security Baselines
-
-### S0 - Base Security (Always Apply)
-
-- **Authentication**: Explicit strategy, enforced on every endpoint
-- **Authorization**: Least privilege, deny by default
-- **Input Validation**: Centralized, server-side validation
-- **Output Encoding**: Context-appropriate encoding
-- **Secrets**: Never in code or logs, loaded from secure storage
-- **Transport**: HTTPS/TLS everywhere
-- **Errors**: Generic messages to clients, details server-side only
-- **Dependencies**: Locked versions, vulnerability scanning
-- **Logging**: Structured logs with correlation IDs, no sensitive data
-- **Rate Limiting**: On all public interfaces
-
-### A0 - AI/LLM Security (When Building AI Features)
-
-- **Untrusted Output**: Treat all model output as untrusted
-- **Prompt Injection**: Sanitize inputs, separate system/user prompts
-- **Tool Safety**: Allowlists, parameter validation, least privilege
-- **Data Boundaries**: Tenant-scoped retrieval, role-based access
-- **Output Controls**: Redaction, content filtering, human-in-the-loop
-- **Cost Controls**: Token limits, rate limiting, timeouts
-- **Audit**: Log AI actions without sensitive prompt details
-
-### V0 - Audit/Evidence (When Compliance Required)
-
-- **Event Logging**: Append-only, who/what/when, trace IDs
-- **Tamper Evidence**: Hash chains where appropriate
-- **Retention**: Defined policy, secure storage
-
-### C0 - Cloud Deployment (When Deploying to Cloud)
-
-- **IAM**: Least privilege roles, no long-lived credentials
-- **Keys**: KMS/HSM storage, rotation strategy
-- **Network**: Private networking, no public admin ports
-- **Logging**: Central logging, security event alerts
-
-## OWASP Top 10 Quick Reference
-
-When reviewing or implementing, check against:
-
-| Code | Risk | Key Control |
-|------|------|-------------|
-| A01 | Broken Access Control | Enforce authz on every request |
-| A02 | Cryptographic Failures | Encrypt sensitive data, use TLS |
-| A03 | Injection | Parameterized queries, input validation |
-| A04 | Insecure Design | Threat modeling, secure patterns |
-| A05 | Security Misconfiguration | Secure defaults, no debug in prod |
-| A06 | Vulnerable Components | Dependency scanning, updates |
-| A07 | Auth Failures | Strong auth, session management |
-| A08 | Integrity Failures | Verify signatures, secure CI/CD |
-| A09 | Logging Failures | Security event logging, monitoring |
-| A10 | SSRF | Validate outbound URLs |
-
-## OWASP LLM Top 10 Quick Reference
-
-For AI/LLM features, also check:
-
-| Code | Risk | Key Control |
-|------|------|-------------|
-| LLM01 | Prompt Injection | Input sanitization, separation |
-| LLM02 | Insecure Output | Output validation, sandboxing |
-| LLM03 | Training Poisoning | Data provenance, validation |
-| LLM04 | Model DoS | Rate limits, token caps, timeouts |
-| LLM05 | Supply Chain | Model/plugin verification |
-| LLM06 | Info Disclosure | Data boundaries, redaction |
-| LLM07 | Insecure Plugins | Allowlists, validation |
-| LLM08 | Excessive Agency | Least privilege, human approval |
-| LLM09 | Overreliance | Confidence checks, human oversight |
-| LLM10 | Model Theft | Access controls, monitoring |
-
-## Security in Change Documents
-
-Every change document must include:
-
-```markdown
-## Security Impact
-- **Risks reduced**: [e.g., A03 - adding parameterized queries]
-- **New risks introduced**: [e.g., None, or LLM04 - new LLM endpoint]
-- **OWASP mapping**: [e.g., A03-Injection, LLM01-Prompt Injection]
-- **Controls implemented**: [e.g., #11, #82 from catalog]
-```
-
-## Security Review Checklist
-
-Before approving any change:
-
-- [ ] Input validation in place (controls 1-10)
-- [ ] Output encoding appropriate (controls 11-18)
-- [ ] Authentication verified (controls 19-26)
-- [ ] Authorization enforced (controls 33-38)
-- [ ] Secrets handled securely (control 44)
-- [ ] Error handling safe (controls 45-50)
-- [ ] Dependencies reviewed (controls 74-77)
-- [ ] AI controls if applicable (controls 82-87)
-
-## References
-
-- Full control list: `sdlc/catalogs/owasp-secure-coding-100.md`
-- OWASP Web Top 10: `sdlc/catalogs/owasp-top10-web-summary.md`
-- OWASP LLM Top 10: `sdlc/catalogs/owasp-llm-top10-summary.md`
-- Security baselines: `sdlc/docs/security/security-baselines.md`
+Load `sdlc/docs/security/security-baselines.md` and relevant catalogs only when
+the active change needs those baselines.

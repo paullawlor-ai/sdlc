@@ -7,6 +7,8 @@ What changed (1-3 sentences).
 Why is this needed? What risk/bug/requirement does it address?
 
 ## Scope
+- **Risk class**: trivial | standard | high-risk
+- **Policy profile**: lite | standard | regulated
 - **Components affected**:
 - **Files likely touched**:
 - **Backwards compatibility**:

@@ -117,7 +117,8 @@ Implement the approved design, starting with a change proposal.
 ### Testing Phase
 **Invoke**: Tester Agent
 **Goal**: Verify the implementation
-**Complete when**: Tests pass, coverage adequate — then **mandatory** Security Review (Completion Gate)
+**Complete when**: Tests pass and coverage is adequate; then apply the effective
+class/profile Completion Gate requirement
 
 ```
 Act as the Tester agent.

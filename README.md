@@ -30,11 +30,16 @@ Requirements  →  Design (ADRs)  →  Change proposal  →  Human approval
 
 1. **You copy `sdlc/`** into your project — it holds agents, prompts, workflows, templates, and scripts. It is framework infrastructure, not product code.
 
-2. **Setup installs adapters** — Cursor rules, Copilot instructions, Codex `AGENTS.md`, and Claude Code hooks land at your project root. Your existing config is never overwritten.
+2. **Setup installs selected adapters** — Cursor rules, Copilot instructions,
+Codex `AGENTS.md`, and Claude Code hooks can be installed individually. Managed
+files are versioned; local modifications are preserved during upgrades.
 
 3. **Work produces `sdlc_artifacts/`** — requirements, ADRs, change proposals, reviews, and `STATE.md` (current phase and open items). Agents read these every session.
 
-4. **Gates enforce discipline** — nothing ships to product code without an approved change proposal. Approval fields (`Status: Approved`, `Implemented`, etc.) are human-only. Claude Code hooks enforce this at the tool level; other assistants follow the same rules via instructions.
+4. **Gates enforce discipline proportionately** — work is classified as trivial,
+standard, or high-risk under the project's `lite`, `standard`, or `regulated`
+profile. Approval fields (`Status: Approved`, `Implemented`, etc.) remain
+human-only. See [Policy profiles](docs/framework/policy-profiles.md).
 
 5. **You drive with prompts** — tell your assistant `Read sdlc/prompts/continue.md and resume` and it picks up where you left off.
 
@@ -51,6 +56,13 @@ Copy the `sdlc/` folder into your project root, then run:
 ```bash
 python sdlc/scripts/setup_project.py
 python sdlc/scripts/verify_setup.py
+```
+
+Install only the assistants used by a project when preferred:
+
+```bash
+python sdlc/scripts/setup_project.py --assistant codex
+python sdlc/scripts/setup_project.py --assistant cursor --assistant claude
 ```
 
 Setup is safe to re-run. It skips files you already have — compare with `sdlc/adapters/` when upgrading the framework.
@@ -114,7 +126,7 @@ Three gates keep AI-assisted work under control:
 |------|------|----------------|
 | **Approval** | Before implementation | Change proposal reviewed; **you** set `Status: Approved` in the file |
 | **Implementation** | Before every product-code edit | Approved change exists; blocking ADRs accepted; Active Change set when multiple approved |
-| **Completion** | Before marking done | Tests pass; security review (REV) written; **you** set `Status: Implemented` |
+| **Completion** | Before marking done when required by profile/class | Tests pass; required REV is written; **you** set `Status: Implemented` |
 
 **Human-only fields** — the model must never write approval statuses, sign-offs, or REV verdict checkboxes. In Claude Code, `approval_field_guard.py` blocks these at the tool level. In Cursor and Copilot, the rules instruct the model to stop and ask you to edit the file yourself.
 
@@ -184,13 +196,20 @@ python sdlc/scripts/setup_project.py              # install adapters + hooks
 python sdlc/scripts/setup_project.py --dry-run    # preview changes
 python sdlc/scripts/verify_setup.py               # verify installation
 python sdlc/scripts/status.py                     # summarise project state
+python sdlc/scripts/sdlc.py next                  # next permitted action
+python sdlc/scripts/sdlc.py context               # compact assistant context
+python sdlc/scripts/sdlc.py check                 # validate policy and artifacts
 
 python sdlc/scripts/new_requirement.py "title"
 python sdlc/scripts/new_change.py "description"
 python sdlc/scripts/new_adr.py "decision title"
+python sdlc/scripts/new_review.py "change title"
 python sdlc/scripts/new_state.py
 python sdlc/scripts/init_project.py python-fastapi-ai   # optional template
 ```
+
+The unified equivalents are `sdlc.py new`, `sdlc.py setup`, `sdlc.py verify`,
+and `sdlc.py upgrade`. Existing script names remain compatibility entry points.
 
 ---
 
@@ -209,6 +228,10 @@ python sdlc/scripts/init_project.py python-fastapi-ai   # optional template
 Supporting roles: **Docs Writer**, **Web Designer/Engineer**. Full phase guide: [SDLC phases](docs/framework/sdlc-phases.md).
 
 Large changes are split into **implementation phases** sized for one AI session (~2–3 files, ~200 lines). See [Change proposal template](templates/documents/change-proposal.md).
+
+Runtime adapters are generated from `policy/sdlc-policy.json` and kept below a
+configured token budget. Detailed workflows, roles, and catalogs are loaded only
+when the current action needs them.
 
 ---
 
@@ -239,6 +262,10 @@ Reference: [Security baselines](docs/security/security-baselines.md)
 | Filled-in examples | [examples/](examples/) |
 | FAQ | [faq.md](docs/framework/faq.md) |
 | External filesystem enforcement | [External enforcement agent](docs/framework/external-enforcement-agent.md) |
+| Policy profiles and change classes | [Policy profiles](docs/framework/policy-profiles.md) |
+| Structured artifact index | [Structured artifacts](docs/framework/structured-artifacts.md) |
+| Framework upgrades | [Upgrading](docs/framework/upgrading.md) |
+| Release process | [Release checklist](docs/framework/releasing.md) |
 
 ---
 
