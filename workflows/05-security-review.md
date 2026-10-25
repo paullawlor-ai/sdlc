@@ -22,6 +22,14 @@ section, then the human sets **Status: Implemented**.
 
 ## Activities
 
+Run the [quality and security checks](../docs/framework/quality-and-security.md)
+against the tested working tree. Link the JSON report, reviewed source digest,
+and revision in the REV. Required reviews fail closed on scanner errors,
+findings, incomplete scope, expired evidence, or changed source. Policy permits
+no risk exceptions. Human sign-off, where required, includes the approved source
+digest. Assess authorization, data boundaries, business logic, and AI tool access
+in addition to automated findings.
+
 ### 1. Review Against OWASP
 
 Check against:
@@ -62,7 +70,11 @@ Check applicable baselines:
 
 ### 3. Document Findings
 
-Create or update review document in `sdlc_artifacts/reviews/`. The agent writes all sections **except** human-only `## Summary Verdict` checkboxes and `## Approval`. Put the agent's verdict in **`## Agent Recommendation`** (used by Completion Gate).
+Create or update review document in `sdlc_artifacts/reviews/`. The agent writes all sections **except** human-only `## Summary Verdict` checkboxes and `## Approval`. Put the agent's verdict in **`## Agent Recommendation`** (used by Completion Gate but never treated as human sign-off).
+
+Human REV fields are optional for ordinary `lite` and `standard` work. They are
+required for the `regulated` profile and every high-risk change: exactly one
+approving Summary Verdict, reviewer name, and ISO `YYYY-MM-DD` date.
 
 Create review document:
 
@@ -99,7 +111,10 @@ Create review document:
 
 ### 4. Record Completion Gate
 
-Fill `## Completion Gate` in the linked change proposal(s). Gate **PASS** only if Agent Recommendation is Approved or Approved with notes and there are no open Must-Fix items.
+Fill `## Completion Gate` in the linked change proposal(s). Gate **PASS** only if Agent Recommendation is Approved or Approved with notes, there are no open Must-Fix items, and any policy-required human review evidence is present.
+
+Run `python sdlc/scripts/sdlc.py check --ready-to-finalize` before asking the
+human to set the change status to `Implemented`.
 
 ### 5. Report Results
 

@@ -5,6 +5,7 @@ Usage:
   python sdlc/scripts/new_state.py
   python sdlc/scripts/new_state.py --reset   # overwrite existing STATE.md
 """
+
 import os
 import sys
 from _paths import FRAMEWORK_ROOT, artifacts_root

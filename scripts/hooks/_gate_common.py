@@ -1,4 +1,5 @@
 """Shared helpers for SDLC implementation gate hooks."""
+
 from __future__ import annotations
 
 import os
@@ -9,7 +10,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from _artifacts import field_in_section, field_value, validate_artifacts  # noqa: E402
+from _artifacts import validate_artifacts  # noqa: E402
+from _fields import canonical_status, field_in_section, field_value  # noqa: E402
 
 EXCLUDED_PREFIXES = (
     "sdlc" + os.sep,
@@ -25,6 +27,7 @@ EXCLUDED_PREFIXES = (
     ".git" + os.sep,
     ".git/",
 )
+
 
 def find_project_root() -> Path:
     cwd = Path.cwd().resolve()
@@ -105,7 +108,7 @@ def approved_change_files(project_root: Path) -> list[Path]:
             text = md.read_text(encoding="utf-8", errors="ignore")
         except OSError:
             continue
-        if field_in_section(text, "Approval", "Status") == "Approved":
+        if canonical_status(text, "change") == "Approved":
             found.append(md)
     return found
 
@@ -114,7 +117,15 @@ def proposed_change_names(project_root: Path) -> list[str]:
     changes_dir = artifacts_dir(project_root) / "changes"
     if not changes_dir.is_dir():
         return []
-    return sorted(f.name for f in changes_dir.glob("*.md"))
+    proposed = []
+    for path in sorted(changes_dir.glob("*.md")):
+        try:
+            text = path.read_text(encoding="utf-8", errors="ignore")
+        except OSError:
+            continue
+        if canonical_status(text, "change") == "Proposed":
+            proposed.append(path.name)
+    return proposed
 
 
 def _is_template_placeholder(value: str) -> bool:
@@ -228,7 +239,11 @@ def find_adr_file(adr_id: str, project_root: Path) -> Path | None:
     if not decisions_dir.is_dir():
         return None
     num = re.sub(r"[^0-9]", "", adr_id).lstrip("0") or "0"
-    for search_dir in [decisions_dir, decisions_dir / "proposed", decisions_dir / "accepted"]:
+    for search_dir in [
+        decisions_dir,
+        decisions_dir / "proposed",
+        decisions_dir / "accepted",
+    ]:
         if not search_dir.is_dir():
             continue
         for md in search_dir.glob("*.md"):
@@ -244,7 +259,7 @@ def adr_is_accepted(adr_file: Path) -> bool:
         # Gate-critical evidence must be readable. Failing closed prevents an
         # unavailable ADR from being treated as accepted.
         return False
-    return field_in_section(text, "Status", "Current status") in {"Accepted", "Approved"}
+    return canonical_status(text, "adr") in {"Accepted", "Approved"}
 
 
 def check_blocking_adrs(approved: list[Path], project_root: Path) -> list[str]:
@@ -253,7 +268,9 @@ def check_blocking_adrs(approved: list[Path], project_root: Path) -> list[str]:
         for adr_id in blocking_adrs_from_change(change_file):
             adr_file = find_adr_file(adr_id, project_root)
             if adr_file is None:
-                unaccepted.append(f"{adr_id} (file not found in sdlc_artifacts/decisions/)")
+                unaccepted.append(
+                    f"{adr_id} (file not found in sdlc_artifacts/decisions/)"
+                )
             elif not adr_is_accepted(adr_file):
                 unaccepted.append(f"{adr_id} ({adr_file.name})")
     return unaccepted

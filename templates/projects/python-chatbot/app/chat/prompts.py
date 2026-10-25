@@ -36,4 +36,3 @@ def build_messages(
     messages.append({"role": "user", "content": user_message})
 
     return messages
-

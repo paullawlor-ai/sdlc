@@ -53,6 +53,16 @@ class ApprovalFieldGuardTests(unittest.TestCase):
         after = "## Last Session Summary\n**Date**: 2026-10-18\n"
         self.assertEqual(protected_snapshot(before), protected_snapshot(after))
 
+    def test_legacy_approval_date_is_protected(self) -> None:
+        before = "## Approval\n- **Date**: 21/10/2026\n"
+        after = "## Approval\n- **Date**: 22/10/2026\n"
+        self.assertNotEqual(protected_snapshot(before), protected_snapshot(after))
+
+    def test_empty_approval_date_remains_unprotected(self) -> None:
+        before = "## Approval\n- **Date**:\n"
+        after = "## Approval\n- **Date**:\n"
+        self.assertEqual(protected_snapshot(before), protected_snapshot(after))
+
     def test_ordinary_approved_checkbox_is_not_a_verdict(self) -> None:
         before = "## Checklist\n- [ ] Approved dependency is present\n"
         after = "## Checklist\n- [x] Approved dependency is present\n"

@@ -13,6 +13,7 @@ Examples:
   python sdlc/scripts/init_project.py python-fastapi-ai
   python sdlc/scripts/init_project.py python-chatbot ./my-chatbot
 """
+
 import os
 import shutil
 import sys
@@ -28,7 +29,7 @@ TEMPLATES_DIR = os.path.join(ROOT, "templates", "projects")
 # directory. Public users can run `--list` to discover these names.
 AVAILABLE_TEMPLATES = [
     "python-fastapi-ai",
-    "python-chatbot", 
+    "python-chatbot",
     "python-cli",
 ]
 
@@ -60,27 +61,27 @@ def copy_template(template_name: str, target_dir: str):
     existing folder without deleting unrelated files.
     """
     template_path = os.path.join(TEMPLATES_DIR, template_name)
-    
+
     # Fail fast with a friendly message rather than letting shutil raise a
     # lower-level file error.
     if not os.path.exists(template_path):
         print(f"Error: Template '{template_name}' not found.")
         print(f"Available templates: {', '.join(AVAILABLE_TEMPLATES)}")
         sys.exit(1)
-    
+
     # Create target directory if it doesn't exist
     os.makedirs(target_dir, exist_ok=True)
-    
+
     # Copy template files
     for item in os.listdir(template_path):
         src = os.path.join(template_path, item)
         dst = os.path.join(target_dir, item)
-        
+
         if os.path.isdir(src):
             shutil.copytree(src, dst, dirs_exist_ok=True)
         else:
             shutil.copy2(src, dst)
-    
+
     print(f"Initialized project from template: {template_name}")
     print(f"Target directory: {target_dir}")
     print()
@@ -100,20 +101,20 @@ def main():
         print()
         list_templates()
         sys.exit(0)
-    
+
     template_name = sys.argv[1]
-    
+
     if template_name in ["--list", "-l"]:
         list_templates()
         sys.exit(0)
-    
+
     # Only allow known templates. This prevents surprising copies from arbitrary
     # sibling directories under templates/projects.
     if template_name not in AVAILABLE_TEMPLATES:
         print(f"Error: Unknown template '{template_name}'")
         list_templates()
         sys.exit(1)
-    
+
     # Determine target directory
     if len(sys.argv) >= 3:
         target_dir = sys.argv[2]
@@ -121,9 +122,9 @@ def main():
         # Default to the framework root for convenience when someone is using
         # this repository as a starting point rather than as an embedded tool.
         target_dir = ROOT  # Initialize in framework root
-    
+
     target_dir = os.path.abspath(target_dir)
-    
+
     copy_template(template_name, target_dir)
 
 

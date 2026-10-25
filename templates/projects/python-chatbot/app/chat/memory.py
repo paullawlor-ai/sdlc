@@ -33,4 +33,3 @@ class ConversationMemory:
         max_messages = self.max_turns * 2
         if len(self.messages) > max_messages:
             self.messages = self.messages[-max_messages:]
-

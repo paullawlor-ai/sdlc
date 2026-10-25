@@ -33,4 +33,3 @@ def test_complete_max_tokens_validation(client):
         json={"prompt": "Hello", "max_tokens": 10000},  # Exceeds limit
     )
     assert response.status_code == 422  # Validation error
-

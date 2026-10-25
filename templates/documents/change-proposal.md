@@ -1,6 +1,7 @@
 # Change XXXX - <short title>
 
 ## Summary
+<!-- Ordinary-context layer. State the outcome in 1-3 sentences; do not repeat linked artifact prose. -->
 What changed (1-3 sentences).
 
 ## Motivation
@@ -97,10 +98,18 @@ Alternatives considered and why they were rejected.
 Exact rollback steps (toggle/flag/revert).
 Expected side effects of rollback.
 
+## Evidence References
+<!-- Link durable detail and raw evidence. Normal context excludes this section unless explicitly requested. -->
+- **Requirements**:
+- **ADRs**:
+- **Tests / results**:
+- **Review**:
+- **Detailed evidence**:
+
 ## Approval
 <!-- HUMAN-ONLY SECTION. The model must not edit Status, Approved by, or Date. -->
-<!-- Model creates this document and sets Status: Proposed. Human reviews and updates. -->
-- **Status**: Proposed | Approved | Implemented | Rejected | Superseded
+<!-- Model creates this document as Draft and uses `sdlc propose` when it is complete. Human reviews subsequent status changes. -->
+- **Status**: Draft
   <!-- Implemented: human sets only after Completion Gate PASS (tests + REV). -->
 - **Approved by**:
 - **Date**:
@@ -121,6 +130,7 @@ Expected side effects of rollback.
 <!-- Model fills after tests pass and security review. Human sets Approval Status: Implemented only after PASS. -->
 - **Gate checked by**:
 - **Gate checked at**:
+- **Tested revision**:
 - **Tests passing**:
 - **Security review (REV)**:
 - **Agent recommendation**:

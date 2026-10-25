@@ -4,10 +4,13 @@
 Usage:
   python sdlc/scripts/new_adr.py "use FastAPI for API layer"
 """
+
 import os
 import re
 import sys
+from pathlib import Path
 from _paths import FRAMEWORK_ROOT, artifacts_root
+from _artifacts import metadata_root, project_metadata_mode, sync_artifact_metadata
 
 # ADRs are project evidence, so they are written to sdlc_artifacts. The template
 # remains in the immutable framework folder.
@@ -41,7 +44,7 @@ def next_num() -> int:
                 m = re.match(r"^ADR-(\d{4})-", fn)
                 if m:
                     nums.append(int(m.group(1)))
-    
+
     return (max(nums) + 1) if nums else 1
 
 
@@ -57,8 +60,8 @@ def main():
     slug = slugify(title)
     out = ADR_DIR / f"ADR-{n:04d}-{slug}.md"
 
-    # New ADRs always start in `proposed`. Human approval moves them to
-    # `accepted`; this preserves the framework's approval gate.
+    # New ADRs start as Draft files in `proposed`. The agent promotes a complete
+    # draft to Proposed; human acceptance then moves it to `accepted`.
     os.makedirs(ADR_DIR, exist_ok=True)
 
     # Fill only mechanical fields. The architectural reasoning should be written
@@ -69,15 +72,19 @@ def main():
     body = body.replace("XXXX", f"{n:04d}")
     body = body.replace("<title>", title)
 
-    with open(out, "w", encoding="utf-8") as f:
-        f.write(body)
+    temporary = Path(str(out) + ".sdlc-tmp")
+    temporary.write_text(body, encoding="utf-8")
+    temporary.replace(out)
+    root = artifacts_root().parent
+    if project_metadata_mode(root) == "required" or metadata_root(root).is_dir():
+        sync_artifact_metadata(root, out)
 
     # Print the important identifiers so scripts, agents, or humans can paste
     # them into status reports.
     print(f"Created: {out}")
     print(f"ADR number: {n:04d}")
     print(f"Title: {title}")
-    print(f"Status: Proposed")
+    print("Status: Draft")
 
 
 if __name__ == "__main__":

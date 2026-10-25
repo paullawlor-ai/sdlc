@@ -8,4 +8,6 @@ alwaysApply: false
 
 Role definitions are under `sdlc/agents/`. Read only the role needed for the
 current action. "Invoke" means spawn a specialist when supported, otherwise
-adopt that role in the current session. Record handoffs in `STATE.md`.
+adopt that role in the current session. Record compact handoffs with
+`python sdlc/scripts/sdlc.py handoff`; it archives the previous entry outside
+the default context packet.

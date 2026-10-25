@@ -158,3 +158,19 @@ docker run -p 8000:8000 --env-file .env my-ai-service
 2. Run the bootstrap prompt in Cursor
 3. Follow the SDLC phases to build your service
 
+
+## Quality checks
+
+Install development tools separately, then run these commands from this project:
+
+```bash
+python -m pip install -r requirements-dev.txt
+python -m ruff check app tests
+python -m ruff format --check app tests
+python -m pytest -q
+```
+
+When using the SDLC framework, run `python sdlc/scripts/security_scan.py` from the
+host project root and link its report in the security review. It runs Bandit,
+detect-secrets, and pip-audit. Scan failures and unresolved findings block required
+reviews. See `sdlc/docs/framework/quality-and-security.md` for scope and freshness.

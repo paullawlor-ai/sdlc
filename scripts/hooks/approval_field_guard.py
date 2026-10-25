@@ -9,40 +9,16 @@ Exit codes:
   0  - allow
   2  - block
 """
+
 import json
 import os
-import re
 import sys
 from collections import Counter
 from pathlib import Path
 
-# Patterns match human decisions rather than empty/template fields. Existing
-# decisions are allowed to remain in a document; edits are blocked only when
-# the protected snapshot changes.
-APPROVAL_PATTERNS = (
-    r"(?im)^\s*[-*]?\s*[*_]*status[*_]*\s*[:\|]\s*(Approved|Accepted|Implemented|Rejected|Superseded)\b",
-    r"(?im)^\s*[-*]?\s*[*_]*current\s+status[*_]*\s*[:\|]\s*(Accepted|Approved|Implemented|Rejected|Superseded)\b",
-    r"(?im)^\s*[-*]?\s*[*_]*sign[- ]?off[*_]*\s*[:\|]\s*(Approved|Accepted|Complete)\b",
-)
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-IDENTITY_FIELD = re.compile(
-    r"(?im)^\s*[-*]?\s*[*_]*(approved\s+by|reviewed\s+by|reviewer)"
-    r"[*_]*\s*[:\|]\s*(.+?)\s*$"
-)
-DATE_FIELD = re.compile(
-    r"(?im)^\s*[-*]?\s*[*_]*(date)"
-    r"[*_]*\s*[:\|]\s*(\d{4}-\d{2}-\d{2})\s*$"
-)
-CHECKED_VERDICT = re.compile(
-    r"(?im)^\s*[-*]\s*\[[xX]\]\s*(Approved(?:\s+with\s+notes)?|Needs\s+changes|Rejected)\s*$"
-)
-PLACEHOLDER_VALUES = {
-    "",
-    "human | agent-reviewer",
-    "human | agent-reviewer | both",
-    "[name]",
-    "[yyyy-mm-dd]",
-}
+from _fields import protected_approval_values  # noqa: E402
 
 ARTIFACTS_PREFIXES = (
     "sdlc_artifacts" + os.sep,
@@ -71,34 +47,7 @@ def is_artifact_file(file_path: str, project_root: Path) -> bool:
 
 def protected_snapshot(content: str) -> Counter[str]:
     """Return normalized protected decisions present in artifact content."""
-    def section(title: str) -> str:
-        match = re.search(
-            rf"(?ims)^##\s+{re.escape(title)}\s*$\n(.*?)(?=^##\s+|\Z)", content
-        )
-        return match.group(1) if match else ""
-
-    approval_content = "\n".join(
-        (section("Approval"), section("Status"), section("Sign-off"))
-    )
-    values: list[str] = []
-    for pattern in APPROVAL_PATTERNS:
-        values.extend(
-            match.group().strip().lower()
-            for match in re.finditer(pattern, approval_content)
-        )
-    for match in IDENTITY_FIELD.finditer(approval_content):
-        value = match.group(2).strip().lower()
-        if value not in PLACEHOLDER_VALUES and not value.startswith("<!--"):
-            values.append(f"{match.group(1).lower()}:{value}")
-    values.extend(
-        f"{match.group(1).lower()}:{match.group(2)}"
-        for match in DATE_FIELD.finditer(approval_content)
-    )
-    values.extend(
-        f"verdict:{match.group(1).lower()}"
-        for match in CHECKED_VERDICT.finditer(section("Summary Verdict"))
-    )
-    return Counter(values)
+    return Counter(protected_approval_values(content))
 
 
 def content_before_after(
@@ -118,11 +67,7 @@ def content_before_after(
         return before, tool_input.get("content", "")
 
     if tool_name in ("Edit", "MultiEdit"):
-        edits = (
-            [tool_input]
-            if tool_name == "Edit"
-            else tool_input.get("edits", [])
-        )
+        edits = [tool_input] if tool_name == "Edit" else tool_input.get("edits", [])
         after = before
         for edit in edits:
             old = edit.get("old_string", "")

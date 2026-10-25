@@ -5,6 +5,38 @@ on:
   pull_request:
 
 jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements-dev.txt
+      - run: python -m ruff check scripts tests templates/projects
+      - run: python -m ruff format --check scripts tests templates/projects
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements-dev.txt
+      - run: python -m unittest tests.test_security -v
+        env:
+          SDLC_LIVE_AUDIT: "1"
+      - run: python scripts/security_scan.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-evidence
+          path: sdlc_artifacts/evidence/security.json
+          if-no-files-found: error
+
   test:
     strategy:
       matrix:
@@ -18,14 +50,16 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: python -m unittest discover -s tests -v
       - run: python scripts/generate_adapters.py --check
-      - run: python scripts/sdlc.py check
+      - run: python scripts/release_check.py
+      - run: python scripts/sdlc.py check --strict
       - run: python -m compileall -q scripts tests templates/projects
 
   starter-smoke:
     strategy:
       matrix:
         template: [python-cli, python-chatbot, python-fastapi-ai]
-    runs-on: ubuntu-latest
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
         working-directory: templates/projects/${{ matrix.template }}

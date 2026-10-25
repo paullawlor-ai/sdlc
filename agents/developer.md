@@ -41,6 +41,12 @@ Fill out the template with:
 - Testing approach
 - Rollback plan
 
+Validate the completed Draft and move it into the human approval queue:
+
+```bash
+python sdlc/scripts/sdlc.py propose sdlc_artifacts/changes/NNNN-description.md
+```
+
 ### Step 3: Wait for Approval
 
 ```markdown
@@ -173,8 +179,11 @@ Before marking complete:
 [How to undo this change quickly]
 
 ## Approval
-- Status: Proposed
+- Status: Draft
 ```
+
+After completing this content, run `sdlc propose` rather than editing Draft to
+Proposed directly.
 
 ## Coding Standards
 

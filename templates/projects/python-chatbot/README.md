@@ -125,3 +125,23 @@ Key settings:
 2. Run the bootstrap prompt in Cursor
 3. Follow the SDLC phases to build your chatbot
 
+
+## Quality checks
+
+The RAG retriever is a placeholder. Select and security-review a retrieval store
+and embedding implementation before enabling it; optional vector-store/model
+packages are not installed by this starter.
+
+Install development tools separately, then run these commands from this project:
+
+```bash
+python -m pip install -r requirements-dev.txt
+python -m ruff check app tests
+python -m ruff format --check app tests
+python -m pytest -q
+```
+
+When using the SDLC framework, run `python sdlc/scripts/security_scan.py` from the
+host project root and link its report in the security review. It runs Bandit,
+detect-secrets, and pip-audit. Scan failures and unresolved findings block required
+reviews. See `sdlc/docs/framework/quality-and-security.md` for scope and freshness.

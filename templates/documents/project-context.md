@@ -82,6 +82,7 @@ Additional constraints:
 - [e.g. "Test files mirror source structure in tests/"]
 - [e.g. "Run single test: pytest tests/test_foo.py::test_bar"]
 - [e.g. "Activate .venv before running pytest: source .venv/Scripts/activate && pytest"]
+- [Use pytest tmp_path/tmp_path_factory or another unique OS temp directory; never share a fixed project-local --basetemp across runs]
 
 ### File / Module Organisation
 - [e.g. "One module per domain concept; no circular imports"]

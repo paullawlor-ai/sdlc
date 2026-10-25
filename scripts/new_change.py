@@ -4,10 +4,13 @@
 Usage:
   python sdlc/scripts/new_change.py "add rate limit middleware"
 """
+
 import os
 import re
 import sys
+from pathlib import Path
 from _paths import FRAMEWORK_ROOT, artifacts_root
+from _artifacts import metadata_root, project_metadata_mode, sync_artifact_metadata
 
 # Change proposals are project-specific evidence. The framework owns the
 # template, while the host project owns the generated files.
@@ -61,13 +64,18 @@ def main():
     body = body.replace("XXXX", f"{n:04d}")
     body = body.replace("<short title>", title)
 
-    with open(out, "w", encoding="utf-8") as f:
-        f.write(body)
+    temporary = Path(str(out) + ".sdlc-tmp")
+    temporary.write_text(body, encoding="utf-8")
+    temporary.replace(out)
+    root = artifacts_root().parent
+    if project_metadata_mode(root) == "required" or metadata_root(root).is_dir():
+        sync_artifact_metadata(root, out)
 
     # Keep output deliberately plain so it works well in terminals and agent logs.
     print(f"Created: {out}")
     print(f"Change number: {n:04d}")
     print(f"Title: {title}")
+    print("Status: Draft")
 
 
 if __name__ == "__main__":

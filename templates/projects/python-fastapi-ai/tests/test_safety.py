@@ -61,4 +61,3 @@ def test_check_pii_none():
     """Test PII detection with no PII."""
     result = check_pii("This is just regular text.")
     assert result == []
-

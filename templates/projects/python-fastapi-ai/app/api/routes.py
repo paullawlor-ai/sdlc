@@ -72,4 +72,3 @@ async def complete(
         request_id=request_id,
         tokens_used=result["tokens_used"],
     )
-

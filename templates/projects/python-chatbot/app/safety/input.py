@@ -49,4 +49,3 @@ def sanitize_user_input(user_input: str) -> str:
         logger.info("input_truncated", max_length=max_length)
 
     return user_input
-

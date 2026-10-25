@@ -18,8 +18,34 @@ class PolicyTests(unittest.TestCase):
         self.assertIn(policy["default_profile"], policy["profiles"])
 
     def test_profile_adjusts_completion_review(self) -> None:
-        self.assertFalse(change_requirements("trivial", "standard")["requires_security_review"])
-        self.assertTrue(change_requirements("trivial", "regulated")["requires_security_review"])
+        self.assertFalse(
+            change_requirements("trivial", "standard")["requires_security_review"]
+        )
+        self.assertTrue(
+            change_requirements("trivial", "regulated")["requires_security_review"]
+        )
+        self.assertFalse(
+            change_requirements("standard", "standard")["require_committed_evidence"]
+        )
+        self.assertTrue(
+            change_requirements("standard", "regulated")["require_committed_evidence"]
+        )
+
+    def test_human_review_is_required_by_profile_or_risk(self) -> None:
+        self.assertEqual(
+            change_requirements("standard", "lite")["review_signoff"],
+            "agent_recommendation",
+        )
+        self.assertEqual(
+            change_requirements("standard", "standard")["review_signoff"],
+            "human_change_transition",
+        )
+        self.assertTrue(
+            change_requirements("standard", "regulated")["requires_human_review"]
+        )
+        self.assertTrue(
+            change_requirements("high-risk", "lite")["requires_human_review"]
+        )
 
     def test_all_generated_adapters_fit_budget(self) -> None:
         policy = load_policy()

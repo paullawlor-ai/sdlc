@@ -1,5 +1,10 @@
 # Phase 3: Implementation Workflow
 
+Run the project's Ruff lint and formatting checks before handing off for testing.
+See [quality commands](../docs/framework/quality-and-security.md). Preserve test
+and scan evidence for the implemented revision; source changes require refreshed
+security evidence and any required human review.
+
 ## Overview
 
 The Implementation phase builds the software according to approved designs, following security guidelines and quality standards.
@@ -46,6 +51,14 @@ Fill out:
 - Acceptance criteria
 - Testing plan
 - Rollback procedure
+
+When the Draft is complete, validate and promote it:
+
+```bash
+python sdlc/scripts/sdlc.py propose sdlc_artifacts/changes/NNNN-description.md
+```
+
+Only a successful promotion enters the human approval queue.
 
 ### 3. Wait for Approval
 
@@ -161,8 +174,9 @@ class and project profile require a completion review. Check with
 | 1 | All tests for this change pass (Tester or Developer runs them) |
 | 2 | Create or update `sdlc_artifacts/reviews/REV-NNNN-*.md` referencing this change |
 | 3 | **Agent Recommendation** in REV is `Approved` or `Approved with notes`; no open Must-Fix |
-| 4 | Fill `## Completion Gate` in the change document |
-| 5 | Human sets Approval **Status** to `Implemented` |
+| 4 | For regulated/high-risk work, human records one approving verdict, reviewer, and ISO date in REV |
+| 5 | Fill `## Completion Gate` and run `sdlc check --ready-to-finalize` |
+| 6 | Human sets Approval **Status** to `Implemented` |
 
 If Completion Gate fails, return to Developer for fixes or complete the security review — do not mark Implemented.
 

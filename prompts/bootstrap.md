@@ -30,21 +30,18 @@ Do not proceed with implementation until setup passes or the human confirms they
 
 ### Step 1: Read Framework Context and Initialise Project Files
 
-Read these files to understand the framework (use `sdlc/` prefix when embedded in a host project):
+Setup initializes required metadata for new projects. Keep it synchronized after
+human edits with `python sdlc/scripts/sdlc.py metadata sync --apply`. New changes
+and ADRs start as Draft: complete them and run `sdlc.py propose PATH` before
+requesting human approval. Load the relevant role/workflow as needed; do not load
+every role or security catalogue into ordinary session context.
 
-**Root-template** (framework is repo root):
-- `README.md` - Framework overview
-- `docs/framework/getting-started.md` - How to use the framework
-- `docs/framework/agent-system.md` - How agents work
-- `docs/security/security-baselines.md` - Security requirements
-- `agents/orchestrator.md` - Your role as orchestrator
-
-**Embedded** (framework in `sdlc/` subfolder):
-- `sdlc/README.md`
-- `sdlc/docs/framework/getting-started.md`
-- `sdlc/docs/framework/agent-system.md`
-- `sdlc/docs/security/security-baselines.md`
-- `sdlc/agents/orchestrator.md`
+Start with existing `sdlc_artifacts/STATE.md` and `context.md`, or use
+`python sdlc/scripts/sdlc.py context --budget 2000`. Read `agents/orchestrator.md`
+when coordinating phases. Consult `README.md`, `docs/framework/getting-started.md`,
+and relevant security baselines only as needed to resolve the current task.
+Prefix framework paths with `sdlc/` in embedded projects; omit that prefix when
+the framework itself is the project root.
 
 Then initialise project-specific files if they don't already exist. Use
 `python scripts/...` when this framework is the project root, or

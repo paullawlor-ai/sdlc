@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Generate compact assistant adapters from the canonical SDLC policy."""
+
 from __future__ import annotations
 
 import argparse
@@ -8,7 +9,9 @@ from pathlib import Path
 from _paths import FRAMEWORK_ROOT
 from _policy import load_policy
 
-GENERATED_MARKER = "<!-- Generated from policy/sdlc-policy.json; do not edit directly. -->"
+GENERATED_MARKER = (
+    "<!-- Generated from policy/sdlc-policy.json; do not edit directly. -->"
+)
 
 
 def common_body(policy: dict) -> str:
@@ -18,7 +21,7 @@ def common_body(policy: dict) -> str:
         for name, item in policy["change_classes"].items()
     )
     return f"""{GENERATED_MARKER}
-# Agentic SDLC {policy['framework_version']}
+# Agentic SDLC {policy["framework_version"]}
 
 Read `sdlc_artifacts/STATE.md` and `sdlc_artifacts/context.md` when present.
 For resumed work, prefer `python sdlc/scripts/sdlc.py context` over scanning all
@@ -29,7 +32,7 @@ framework documents. Do not edit `sdlc/` unless maintaining the framework.
 {classes}
 
 Use the project profile from `sdlc_artifacts/config.json`, or
-`{policy['default_profile']}` when absent. Run
+`{policy["default_profile"]}` when absent. Run
 `python sdlc/scripts/sdlc.py gate implementation` before product-code edits.
 
 ## Rules
@@ -66,6 +69,7 @@ blocker. Assistants must not alter human-only approval fields. Completion uses:
 
 ```text
 python sdlc/scripts/sdlc.py gate completion
+python sdlc/scripts/sdlc.py check --ready-to-finalize
 ```
 
 The canonical policy is `sdlc/policy/sdlc-policy.json`. Detailed implementation
@@ -82,7 +86,9 @@ alwaysApply: false
 
 Role definitions are under `sdlc/agents/`. Read only the role needed for the
 current action. "Invoke" means spawn a specialist when supported, otherwise
-adopt that role in the current session. Record handoffs in `STATE.md`.
+adopt that role in the current session. Record compact handoffs with
+`python sdlc/scripts/sdlc.py handoff`; it archives the previous entry outside
+the default context packet.
 """
     cursor_security = f"""---
 description: Contextual SDLC security baselines
@@ -124,7 +130,9 @@ def generate(check: bool = False) -> list[str]:
     for relative, content in outputs(policy).items():
         destination = adapters / relative
         rendered = content.rstrip() + "\n"
-        current = destination.read_text(encoding="utf-8") if destination.exists() else None
+        current = (
+            destination.read_text(encoding="utf-8") if destination.exists() else None
+        )
         if current == rendered:
             messages.append(f"OK: {destination.relative_to(FRAMEWORK_ROOT)}")
             continue

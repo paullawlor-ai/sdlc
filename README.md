@@ -2,9 +2,16 @@
 
 **Structured software delivery for AI-assisted development.**
 
+Prepared source version: **0.3.0** (Unreleased). See the
+[migration guide](docs/framework/upgrading.md) and
+[release checklist](docs/framework/releasing.md).
+
 AI coding assistants are fast — but without guardrails they drift, skip review, and lose context between sessions. This framework gives you a repeatable process: specialised agent roles, written artifacts, human approval gates, and tool adapters so Cursor, Copilot, Claude Code, and Codex all follow the same rules.
 
 Copy the `sdlc/` folder into any project. Run one setup script. Start with a prompt.
+
+Framework contributors: see [quality and security checks](docs/framework/quality-and-security.md)
+for matching local/CI commands and revision-bound review evidence.
 
 ---
 
@@ -198,7 +205,15 @@ python sdlc/scripts/verify_setup.py               # verify installation
 python sdlc/scripts/status.py                     # summarise project state
 python sdlc/scripts/sdlc.py next                  # next permitted action
 python sdlc/scripts/sdlc.py context               # compact assistant context
+python sdlc/scripts/sdlc.py context --extended-evidence  # bounded optional detail
+python sdlc/scripts/sdlc.py handoff --completed "Outcome" --left-off "Resume point"
+python sdlc/scripts/sdlc.py doctor                # interpreter, temp, and Git readiness
 python sdlc/scripts/sdlc.py check                 # validate policy and artifacts
+python sdlc/scripts/sdlc.py check --ready-to-finalize  # explain final human actions
+python sdlc/scripts/sdlc.py propose PATH          # validate Draft and mark Proposed
+python sdlc/scripts/sdlc.py metadata sync         # preview metadata adoption/sync
+python sdlc/scripts/sdlc.py metadata sync --apply # sync and adopt required mode
+python sdlc/scripts/sdlc.py migrate --rollback    # restore metadata snapshot
 
 python sdlc/scripts/new_requirement.py "title"
 python sdlc/scripts/new_change.py "description"
@@ -210,6 +225,26 @@ python sdlc/scripts/init_project.py python-fastapi-ai   # optional template
 
 The unified equivalents are `sdlc.py new`, `sdlc.py setup`, `sdlc.py verify`,
 and `sdlc.py upgrade`. Existing script names remain compatibility entry points.
+
+New changes and ADRs begin as agent-writable Drafts. After completing their
+required scope, dependencies, acceptance/testing evidence, or decision analysis,
+run `sdlc.py propose PATH`. Only a complete artifact is promoted to `Proposed`;
+the subsequent approval or acceptance remains human-owned.
+
+Use `sdlc.py handoff` at a session boundary. It keeps one compact current
+summary in `STATE.md` and archives the previous summary in
+`sdlc_artifacts/history/handoffs.md`, which normal context generation does not
+load. Repeat `--completed` for multiple outcomes and add `--next-action` when
+the next permitted action changed. `sdlc check --json` reports approximate token
+measurements and policy targets for each governed artifact.
+
+`sdlc doctor` prints the exact Python executable in use, whether a virtual
+environment is active, project/temp write readiness, Git baseline and evidence
+status, and fixed pytest `--basetemp` settings that may collide across runs.
+Projects that intentionally do not use Git can set `repository_mode` to
+`non-git` in `sdlc_artifacts/config.json`. The regulated profile otherwise
+requires committed SDLC evidence before finalisation; other profiles report Git
+durability as advisory diagnostics.
 
 ---
 

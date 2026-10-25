@@ -1,6 +1,7 @@
 # Test Plan - <feature or release>
 
 ## Overview
+<!-- Ordinary-context layer: scope, outcome, and material gaps only. -->
 Brief description of what is being tested.
 
 ## Scope
@@ -115,6 +116,12 @@ Describe required test data.
 - Test preparation:
 - Test execution:
 - Test completion:
+
+## Evidence References
+<!-- Link raw output, coverage reports, fixtures, and exhaustive cases rather than pasting them. -->
+- **Automated results**:
+- **Coverage report**:
+- **Detailed cases / logs**:
 
 ## Approval
 - **Prepared by**:

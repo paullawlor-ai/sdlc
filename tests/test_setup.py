@@ -14,7 +14,9 @@ import _setup  # noqa: E402
 
 class SetupTests(unittest.TestCase):
     def test_hook_command_quotes_executable_and_script(self) -> None:
-        with patch.object(_setup.sys, "executable", r"C:\Program Files\Python\python.exe"):
+        with patch.object(
+            _setup.sys, "executable", r"C:\Program Files\Python\python.exe"
+        ):
             command = _setup.hook_command("implementation_gate.py")
         self.assertTrue(command.startswith('"C:\\Program Files\\Python\\python.exe"'))
         self.assertIn('"scripts/hooks/implementation_gate.py"', command)
@@ -60,11 +62,15 @@ class SetupTests(unittest.TestCase):
             _setup.install_managed_adapters(root, adapters, {"codex"})
             destination = root / "AGENTS.md"
             destination.write_text(
-                destination.read_text(encoding="utf-8").replace("version one", "local managed edit"),
+                destination.read_text(encoding="utf-8").replace(
+                    "version one", "local managed edit"
+                ),
                 encoding="utf-8",
             )
             source.write_text("version two", encoding="utf-8")
-            lines = _setup.install_managed_adapters(root, adapters, {"codex"}, upgrade=True)
+            lines = _setup.install_managed_adapters(
+                root, adapters, {"codex"}, upgrade=True
+            )
             self.assertIn("Skipped local modification", lines[0])
             self.assertIn("local managed edit", destination.read_text(encoding="utf-8"))
 
@@ -80,10 +86,17 @@ class SetupTests(unittest.TestCase):
             _setup.install_managed_adapters(root, adapters, {"codex"}, upgrade=True)
             restored = _setup.rollback_managed_adapters(root)
             self.assertEqual(restored, [".sdlc-install.json", "AGENTS.md"])
-            self.assertIn("version one", root.joinpath("AGENTS.md").read_text(encoding="utf-8"))
+            self.assertIn(
+                "version one", root.joinpath("AGENTS.md").read_text(encoding="utf-8")
+            )
             manifest = _setup.load_install_manifest(root)
-            managed = _setup._extract_managed(root.joinpath("AGENTS.md").read_text(encoding="utf-8"))
-            self.assertEqual(manifest["files"]["AGENTS.md"]["installed_sha256"], _setup._text_hash(managed))
+            managed = _setup._extract_managed(
+                root.joinpath("AGENTS.md").read_text(encoding="utf-8")
+            )
+            self.assertEqual(
+                manifest["files"]["AGENTS.md"]["installed_sha256"],
+                _setup._text_hash(managed),
+            )
 
     def test_all_file_assistants_install_selectively(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -105,7 +118,9 @@ class SetupTests(unittest.TestCase):
             self.assertEqual(manifest["schema_version"], 2)
             self.assertEqual(manifest["assistants"], ["codex", "copilot", "cursor"])
             self.assertTrue(root.joinpath("AGENTS.md").is_file())
-            self.assertTrue(root.joinpath(".github", "copilot-instructions.md").is_file())
+            self.assertTrue(
+                root.joinpath(".github", "copilot-instructions.md").is_file()
+            )
             self.assertTrue(root.joinpath(".cursor", "rules", "core.mdc").is_file())
 
 

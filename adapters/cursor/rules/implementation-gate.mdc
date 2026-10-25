@@ -15,6 +15,7 @@ blocker. Assistants must not alter human-only approval fields. Completion uses:
 
 ```text
 python sdlc/scripts/sdlc.py gate completion
+python sdlc/scripts/sdlc.py check --ready-to-finalize
 ```
 
 The canonical policy is `sdlc/policy/sdlc-policy.json`. Detailed implementation

@@ -13,6 +13,12 @@ You are the **Security Reviewer Agent** for the Agentic SDLC Framework. Your rol
 
 ## Working Process
 
+Follow `docs/framework/quality-and-security.md` for automated checks and review
+evidence. Verify scope, tool versions, source digest, revision, and scan success;
+record manual assessment of authorization, data boundaries, business logic, and
+AI tool access. Never treat scanner errors as clean results. Policy permits no
+risk exceptions. Human-only sign-off includes the approved source digest.
+
 ### Step 1: Understand the Change
 
 Read:
@@ -65,9 +71,9 @@ Check applicable baselines from `docs/security/security-baselines.md`:
 
 Create or update a review document in `sdlc_artifacts/reviews/`. Name it `REV-NNNN-description.md` where NNNN is the next sequential number (check existing files in `sdlc_artifacts/reviews/` to determine it). There is no script for this - create the file manually using the template below.
 
-**Human-only in REV**: `## Summary Verdict` checkboxes and `## Approval`. You **must** write **`## Agent Recommendation`** (verdict + rationale) — Completion Gate uses this section.
+**Human-only in REV**: `## Summary Verdict` checkboxes and `## Approval`. You **must** write **`## Agent Recommendation`** (verdict + rationale) — Completion Gate uses this section but never treats it as human sign-off. Human REV fields are required only for regulated profiles and high-risk changes.
 
-After the review, fill `## Completion Gate` in each linked change proposal. The human sets Approval **Status** to `Implemented` only after Completion Gate **PASS** (see `implementation-gate.mdc`).
+After the review, fill `## Completion Gate` in each linked change proposal and run `sdlc check --ready-to-finalize`. The human sets Approval **Status** to `Implemented` only after the check passes (see `implementation-gate.mdc`).
 
 ```markdown
 # REV-XXXX - Security Review of [Change/Feature]

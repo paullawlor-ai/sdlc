@@ -38,6 +38,8 @@
 
 ## Last Session Summary
 
+<!-- Use `sdlc handoff`; it keeps only this entry and archives its predecessor in history/handoffs.md. -->
+
 **Date**: [YYYY-MM-DD]  
 **Completed**: [Concise list or "None"]
 

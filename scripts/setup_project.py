@@ -14,6 +14,7 @@ Safe to re-run:
   - Never overwrites existing adapter files at the project root
   - Merges Claude Code hooks into .claude/settings.json
 """
+
 from __future__ import annotations
 
 import argparse
@@ -28,6 +29,7 @@ from _setup import (
     record_install_selection,
     rollback_managed_adapters,
 )
+from _artifacts import initialize_metadata, project_metadata_mode
 
 
 def _validate_layout() -> None:
@@ -48,7 +50,9 @@ def _validate_layout() -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Install SDLC adapters into the host project.")
+    parser = argparse.ArgumentParser(
+        description="Install SDLC adapters into the host project."
+    )
     parser.add_argument(
         "--dry-run",
         action="store_true",
@@ -75,7 +79,9 @@ def main() -> None:
         action="store_true",
         help="Update unmodified managed adapters and report local conflicts",
     )
-    parser.add_argument("--rollback", action="store_true", help="Restore the latest adapter backup")
+    parser.add_argument(
+        "--rollback", action="store_true", help="Restore the latest adapter backup"
+    )
     parser.add_argument("--backup", help="Specific adapter backup directory to restore")
     args = parser.parse_args()
 
@@ -86,7 +92,7 @@ def main() -> None:
             restored = rollback_managed_adapters(root, args.backup)
         except ValueError as exc:
             print(f"ERROR: {exc}", file=sys.stderr)
-            raise SystemExit(1)
+            raise SystemExit(1) from exc
         print(f"Restored {len(restored)} adapter file(s).")
         for path in restored:
             print(f"  Restored: {path}")
@@ -95,9 +101,7 @@ def main() -> None:
     dry = args.dry_run
     requested = set(args.assistant or ["all"])
     assistants = (
-        {"codex", "cursor", "copilot", "claude"}
-        if "all" in requested
-        else requested
+        {"codex", "cursor", "copilot", "claude"} if "all" in requested else requested
     )
     backup_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
 
@@ -134,6 +138,9 @@ def main() -> None:
     if not args.skip_artifacts:
         print("Artifacts:")
         print("\n".join(ensure_artifacts_root(dry_run=dry)))
+        if not dry and project_metadata_mode(root) == "required":
+            initialize_metadata(root)
+            print("[OK] structured metadata initialized")
         print()
 
     if dry:

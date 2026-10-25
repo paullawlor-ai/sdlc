@@ -1,4 +1,5 @@
 """Shared project setup helpers for adapter installation and Claude hooks."""
+
 from __future__ import annotations
 
 import json
@@ -189,14 +190,26 @@ def _manifest_path(root: Path) -> Path:
 def load_install_manifest(root: Path) -> dict:
     path = _manifest_path(root)
     if not path.is_file():
-        return {"schema_version": 2, "framework_version": None, "assistants": [], "files": {}}
+        return {
+            "schema_version": 2,
+            "framework_version": None,
+            "assistants": [],
+            "files": {},
+        }
     try:
         return json.loads(path.read_text(encoding="utf-8"))
     except (json.JSONDecodeError, OSError):
-        return {"schema_version": 2, "framework_version": None, "assistants": [], "files": {}}
+        return {
+            "schema_version": 2,
+            "framework_version": None,
+            "assistants": [],
+            "files": {},
+        }
 
 
-def adapter_mappings(root: Path, adapters: Path, assistants: set[str]) -> list[tuple[Path, Path, str]]:
+def adapter_mappings(
+    root: Path, adapters: Path, assistants: set[str]
+) -> list[tuple[Path, Path, str]]:
     mappings: list[tuple[Path, Path, str]] = []
     if "cursor" in assistants:
         for src in sorted((adapters / "cursor" / "rules").glob("*.mdc")):
@@ -242,7 +255,9 @@ def install_managed_adapters(
             continue
         source_text = src.read_text(encoding="utf-8")
         shared = _shared_adapter(rel)
-        source_hash = _text_hash(source_text.rstrip() + "\n") if shared else _sha256(src)
+        source_hash = (
+            _text_hash(source_text.rstrip() + "\n") if shared else _sha256(src)
+        )
         action = "skipped"
         if not dst.exists():
             action = "would_install" if dry_run else "installed"
@@ -309,7 +324,11 @@ def rollback_managed_adapters(root: Path, backup: str | None = None) -> list[str
     backup_root = root / ".sdlc-backups"
     selected = Path(backup) if backup else None
     if selected is None:
-        candidates = sorted(path for path in backup_root.iterdir() if path.is_dir()) if backup_root.is_dir() else []
+        candidates = (
+            sorted(path for path in backup_root.iterdir() if path.is_dir())
+            if backup_root.is_dir()
+            else []
+        )
         selected = candidates[-1] if candidates else None
     if selected is None or not selected.is_dir():
         raise ValueError("No adapter backup is available to restore")
@@ -360,7 +379,9 @@ def _format_action(action: str, label: str) -> str:
     return f"  Skipped (exists): {label}"
 
 
-def install_cursor_rules(root: Path, adapters: Path, *, dry_run: bool = False) -> list[str]:
+def install_cursor_rules(
+    root: Path, adapters: Path, *, dry_run: bool = False
+) -> list[str]:
     """Install Cursor rules from adapters/cursor/rules/ into .cursor/rules/."""
     lines: list[str] = []
     rules_src = adapters / "cursor" / "rules"
@@ -376,7 +397,9 @@ def install_cursor_rules(root: Path, adapters: Path, *, dry_run: bool = False) -
     return lines
 
 
-def install_copilot_instructions(root: Path, adapters: Path, *, dry_run: bool = False) -> list[str]:
+def install_copilot_instructions(
+    root: Path, adapters: Path, *, dry_run: bool = False
+) -> list[str]:
     """Install Copilot instruction files into .github/ (creates folder if needed)."""
     lines: list[str] = []
     mappings = [
@@ -399,7 +422,9 @@ def install_copilot_instructions(root: Path, adapters: Path, *, dry_run: bool = 
     return lines
 
 
-def install_codex_agents(root: Path, adapters: Path, *, dry_run: bool = False) -> list[str]:
+def install_codex_agents(
+    root: Path, adapters: Path, *, dry_run: bool = False
+) -> list[str]:
     """Install Codex AGENTS.md at project root when absent."""
     src = adapters / "codex" / "AGENTS.md"
     dst = root / "AGENTS.md"
@@ -454,8 +479,14 @@ def ensure_artifacts_root(*, dry_run: bool = False) -> list[str]:
     from _paths import artifacts_root
 
     mappings = (
-        (FRAMEWORK_ROOT / "templates" / "documents" / "state.md", artifacts_root() / "STATE.md"),
-        (FRAMEWORK_ROOT / "templates" / "documents" / "config.json", artifacts_root() / "config.json"),
+        (
+            FRAMEWORK_ROOT / "templates" / "documents" / "state.md",
+            artifacts_root() / "STATE.md",
+        ),
+        (
+            FRAMEWORK_ROOT / "templates" / "documents" / "config.json",
+            artifacts_root() / "config.json",
+        ),
     )
     lines = []
     for template, out in mappings:

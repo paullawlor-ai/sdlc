@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Measure approximate framework token footprint without external packages."""
+
 from __future__ import annotations
 
 import json
-from pathlib import Path
 
 from _paths import FRAMEWORK_ROOT
 from _policy import load_policy

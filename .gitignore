@@ -5,6 +5,7 @@ __pycache__/
 
 # Local Python environments and tool caches
 .venv/
+.quality-venv/
 venv/
 env/
 ENV/

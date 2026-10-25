@@ -186,7 +186,7 @@ def test_user_can_login_with_valid_credentials():
     # When
     response = client.post("/login", json={
         "email": "test@example.com",
-        "password": "validpassword"
+        "password": fixture_password
     })
     
     # Then
@@ -247,6 +247,8 @@ require a completion review, invoke Security Review before the human sets
 - [ ] REV created/updated in sdlc_artifacts/reviews/
 - [ ] Agent Recommendation recorded
 - [ ] ## Completion Gate filled in change doc
+- [ ] Policy-required human REV evidence recorded for regulated/high-risk work
+- [ ] `sdlc check --ready-to-finalize` passes
 - [ ] Human notified to set Status: Implemented only after PASS
 ```
 

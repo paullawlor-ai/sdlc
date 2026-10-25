@@ -13,6 +13,7 @@ from _gate_common import (  # noqa: E402
     active_change_path,
     adr_is_accepted,
     evaluate_implementation_gate,
+    proposed_change_names,
     resolve_gate_changes,
 )
 
@@ -30,14 +31,25 @@ class GateCommonTests(unittest.TestCase):
     def write_change(self, name: str, status: str = "Approved") -> Path:
         path = self.changes / name
         path.write_text(
-            f"# Change\n## Approval\n- **Status**: {status}\n",
+            "# Change\n## Summary\nImplement the selected scoped change safely.\n"
+            "## Scope\n- **Risk class**: standard\n- **Policy profile**: standard\n"
+            "- **Components affected**: application\n"
+            "## Dependencies\n- **Blocking ADRs**: None\n- **Blocking changes**: None\n"
+            "- **External dependencies**: None\n"
+            "## Proposed Approach\nApply the change in one tested increment.\n"
+            "## Acceptance Criteria\n| ID | Criterion | Test |\n|---|---|---|\n"
+            "| AC-01 | Given the change, when tested, then behavior is correct | unit |\n"
+            "## Testing\n- **Unit tests**: Exercise expected behavior\n"
+            "- **Integration tests**: Verify component interaction\n"
+            "- **Negative / abuse cases**: Reject invalid input\n"
+            f"## Approval\n- **Status**: {status}\n",
             encoding="utf-8",
         )
         return path
 
     def write_state(self, value: str) -> None:
         (self.root / "sdlc_artifacts" / "STATE.md").write_text(
-            "## Active Change\n" f"- **Change document**: {value}\n",
+            f"## Active Change\n- **Change document**: {value}\n",
             encoding="utf-8",
         )
 
@@ -88,6 +100,11 @@ class GateCommonTests(unittest.TestCase):
         changes, error = resolve_gate_changes(self.root)
         self.assertEqual(changes, [])
         self.assertEqual(error[0], "active_change_not_approved")
+
+    def test_draft_change_is_not_pending_human_approval(self) -> None:
+        self.write_change("0001-draft.md", "Draft")
+        self.write_change("0002-proposed.md", "Proposed")
+        self.assertEqual(proposed_change_names(self.root), ["0002-proposed.md"])
 
     def test_gate_allows_single_approved_change(self) -> None:
         self.write_change("0001-approved.md")

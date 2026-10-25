@@ -115,4 +115,3 @@ def check_pii(text: str) -> list[str]:
         logger.warning("pii_detected", types=detected)
 
     return detected
-
