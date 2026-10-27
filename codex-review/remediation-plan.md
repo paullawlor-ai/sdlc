@@ -1,5 +1,10 @@
 # SDLC Framework Remediation Plan
 
+> Historical 0.2.0 record. Baselines, versions, and verification counts below
+> describe that work, not the current release candidate. See the
+> [changelog](../CHANGELOG.md) and [release checklist](../docs/framework/releasing.md)
+> for current status.
+
 **Prepared:** 2026-10-18  
 **Branch:** `codex-review/remediation-plan`  
 **Status:** Technical remediation implemented and locally verified  

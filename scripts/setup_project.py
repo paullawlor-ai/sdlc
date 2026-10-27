@@ -11,7 +11,8 @@ Preview without writing files:
     python sdlc/scripts/setup_project.py --dry-run
 
 Safe to re-run:
-  - Never overwrites existing adapter files at the project root
+  - Preserves owner content outside shared managed sections
+  - Upgrades unchanged managed adapters with --upgrade; reports local conflicts
   - Merges Claude Code hooks into .claude/settings.json
 """
 

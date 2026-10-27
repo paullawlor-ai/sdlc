@@ -2,6 +2,10 @@
 
 ## 0.3.0 - Unreleased
 
+- Removed retired folder placeholders, unused internal setup helpers and starter
+  models/dependencies; corrected stale starter and approval instructions and
+  added ignore rules for backups, temporary writes, and private notes.
+
 - Added structured errors, warnings, informational diagnostics, and policy-driven
   strict checks; shared canonical status/date parsing protects legacy approvals.
 - New changes and ADRs start as Draft. `sdlc propose` validates completeness before

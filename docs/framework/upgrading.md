@@ -1,5 +1,22 @@
 # Upgrading the Framework
 
+## Retired Framework Paths
+
+The legacy framework folders `codex/`, `changes/`, `docs/decisions/`,
+`docs/project/`, and root `reviews/` have been removed. Use
+`adapters/codex/AGENTS.md` for the Codex adapter, `templates/documents/` for
+document templates, and the host project's `sdlc_artifacts/` for generated
+changes, decisions, requirements, design notes, runbooks, and reviews.
+Existing project records belong to the host project; retain or migrate them
+before removing an old directory containing real evidence.
+
+Unused internal per-assistant installers in `scripts/_setup.py` were removed;
+use `setup_project.py` or `sdlc.py setup`. Public compatibility script entry
+points are retained. Starter dependencies now match their shipped code: the
+chatbot uses HTTPX directly, the CLI uses Click/Rich, and the API accepts JSON.
+Add SDK, tokenizer, configuration/logging, or multipart dependencies when the
+host application actually implements those features.
+
 ## Upgrading 0.2.0 Projects to 0.3.0
 
 Back up the project or commit its current state first. Replace only the framework

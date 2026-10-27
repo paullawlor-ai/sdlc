@@ -72,7 +72,9 @@ python sdlc/scripts/setup_project.py --assistant codex
 python sdlc/scripts/setup_project.py --assistant cursor --assistant claude
 ```
 
-Setup is safe to re-run. It skips files you already have — compare with `sdlc/adapters/` when upgrading the framework.
+Setup is safe to re-run. It preserves owner content in shared instruction files
+and reports conflicting local edits. Use the managed
+[upgrade process](docs/framework/upgrading.md) to update installed adapters.
 
 ### 2. Start your first session
 
@@ -296,7 +298,7 @@ Reference: [Security baselines](docs/security/security-baselines.md)
 | Starter project templates | [templates/projects/](templates/projects/) |
 | Filled-in examples | [examples/](examples/) |
 | FAQ | [faq.md](docs/framework/faq.md) |
-| External filesystem enforcement | [External enforcement agent](docs/framework/external-enforcement-agent.md) |
+| External enforcement integration (design) | [External enforcement design note](docs/framework/external-enforcement-agent.md) |
 | Policy profiles and change classes | [Policy profiles](docs/framework/policy-profiles.md) |
 | Structured artifact index | [Structured artifacts](docs/framework/structured-artifacts.md) |
 | Framework upgrades | [Upgrading](docs/framework/upgrading.md) |

@@ -10,7 +10,8 @@ least quarterly and before a framework release. Patch and minor updates may be
 accepted after all starter smoke tests pass. Major updates require a change
 proposal that records migration impact, security review, and rollback steps.
 
-The chatbot's RAG libraries are included for a complete example but are loaded
-only when RAG is enabled. Starter safety checks are educational defaults, not a
+The chatbot's RAG retriever is an implementation placeholder. Retrieval and
+embedding libraries are not installed; select and review them before enabling
+RAG. Starter safety checks are educational defaults, not a
 claim that a production security control is complete without application-specific
 threat modelling, monitoring, and tests.

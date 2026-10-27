@@ -7,7 +7,6 @@ Usage:
 """
 
 import os
-import re
 import sys
 from datetime import date
 from pathlib import Path
@@ -19,23 +18,6 @@ from _artifacts import metadata_root, project_metadata_mode, sync_artifact_metad
 # the framework template directory.
 TEMPLATE = FRAMEWORK_ROOT / "templates" / "documents" / "retrospective.md"
 RETRO_DIR = artifacts_root() / "retrospectives"
-
-
-def next_iter_num() -> int:
-    """Infer the next iteration number from existing retrospective filenames.
-
-    The current CLI asks the caller to provide an iteration number, but this
-    helper is kept for future automation and for readers to see the filename
-    convention: YYYY-MM-DD-iter-N.md.
-    """
-    if not os.path.isdir(RETRO_DIR):
-        return 1
-    nums = []
-    for fn in os.listdir(RETRO_DIR):
-        m = re.search(r"-iter-(\d+)\.md$", fn)
-        if m:
-            nums.append(int(m.group(1)))
-    return (max(nums) + 1) if nums else 1
 
 
 def main():

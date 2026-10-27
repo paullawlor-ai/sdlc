@@ -69,69 +69,25 @@ Check applicable baselines from `docs/security/security-baselines.md`:
 
 ### Step 4: Document Findings
 
-Create or update a review document in `sdlc_artifacts/reviews/`. Name it `REV-NNNN-description.md` where NNNN is the next sequential number (check existing files in `sdlc_artifacts/reviews/` to determine it). There is no script for this - create the file manually using the template below.
+Create the review from the canonical template rather than copying an inline
+example:
 
-**Human-only in REV**: `## Summary Verdict` checkboxes and `## Approval`. You **must** write **`## Agent Recommendation`** (verdict + rationale) — Completion Gate uses this section but never treats it as human sign-off. Human REV fields are required only for regulated profiles and high-risk changes.
-
-After the review, fill `## Completion Gate` in each linked change proposal and run `sdlc check --ready-to-finalize`. The human sets Approval **Status** to `Implemented` only after the check passes (see `implementation-gate.mdc`).
-
-```markdown
-# REV-XXXX - Security Review of [Change/Feature]
-
-## Reviewed Artifacts
-- Change docs: [list]
-- Code files: [list]
-- ADRs: [list]
-
-## Agent Recommendation
-- **Verdict**: Approved | Approved with notes | Needs changes
-- **Rationale**: [why]
-
-## Summary Verdict
-<!-- Human-only checkboxes -->
-- [ ] Approved
-- [ ] Approved with notes
-- [ ] Needs changes
-- [ ] Rejected
-
-## Findings
-
-### Must-Fix
-Critical issues that must be resolved:
-1. **[Finding Title]**
-   - Location: [file:line]
-   - Issue: [description]
-   - Risk: [OWASP category]
-   - Recommendation: [how to fix]
-
-### Should-Fix
-Important issues that should be addressed:
-1. **[Finding Title]**
-   - Location: [file:line]
-   - Issue: [description]
-   - Risk: [OWASP category]
-   - Recommendation: [how to fix]
-
-### Nice-to-Have
-Suggestions for improvement:
-1. **[Suggestion]**
-   - [Description]
-
-## Security Baseline Verification
-- S0: [OK] Complete / [WARN] Partial / [X] Missing
-- A0: [OK] Complete / N/A
-- V0: [OK] Complete / N/A
-- C0: [OK] Complete / N/A
-
-## Rollback Assessment
-- [ ] Rollback plan documented
-- [ ] Rollback is credible and tested
-
-## Approval
-- Reviewer: Security Reviewer Agent
-- Date: [date]
-- Verdict: [verdict]
+```bash
+python sdlc/scripts/new_review.py "change title"
+# Or: python sdlc/scripts/sdlc.py new review "change title"
 ```
+
+Use `templates/documents/review.md` for the current fields. Record reviewed
+artifacts, source digest/revision, scan evidence, applicable controls, findings,
+and an agent recommendation. Do not write `Summary Verdict` checkboxes or any
+human-owned `Approval` field, including reviewer identity, date, and approved
+source digest. Human review fields are required for regulated profiles and
+high-risk changes; they are optional for standard-risk work under the standard
+profile.
+
+After testing and review, complete the agent-writable Completion Gate evidence
+in each linked change and run `sdlc check --ready-to-finalize`. The human sets
+Approval Status to `Implemented` after the required checks and sign-off pass.
 
 ### Step 5: Report Findings
 

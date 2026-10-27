@@ -1,5 +1,10 @@
 # Remediation Implementation Report
 
+> Historical 0.2.0 record. Baselines, versions, and verification counts below
+> describe that work, not the current release candidate. See the
+> [changelog](../CHANGELOG.md) and [release checklist](../docs/framework/releasing.md)
+> for current status.
+
 **Date:** 2026-10-18  
 **Branch:** `codex-review/remediation-plan`  
 **Framework version:** 0.2.0
