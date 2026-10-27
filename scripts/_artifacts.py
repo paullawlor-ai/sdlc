@@ -978,6 +978,8 @@ def propose_artifact(root: Path, path: Path) -> list[Diagnostic]:
     """Promote a complete Draft change or ADR to Proposed atomically."""
     resolved = path if path.is_absolute() else root / path
     try:
+        # Windows may spell the same root with either short or long names.
+        root = root.resolve()
         resolved = resolved.resolve(strict=True)
         resolved.relative_to((root / "sdlc_artifacts").resolve())
     except (OSError, ValueError):

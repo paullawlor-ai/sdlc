@@ -207,6 +207,45 @@ class ArtifactTests(unittest.TestCase):
         self.assertEqual(propose_artifact(self.root, adr), [])
         self.assertIn("**Current status**: Proposed", adr.read_text(encoding="utf-8"))
 
+    def test_propose_normalizes_project_root_for_changes_and_adrs(self) -> None:
+        (self.root / "alternate spelling").mkdir()
+        alias = self.root / "alternate spelling" / ".."
+        for relative, content in (
+            ("changes/0001-example.md", complete_change()),
+            ("decisions/proposed/ADR-0001-metadata.md", complete_adr()),
+        ):
+            with self.subTest(relative=relative):
+                artifact = self.root / "sdlc_artifacts" / relative
+                artifact.parent.mkdir(parents=True, exist_ok=True)
+                artifact.write_text(content, encoding="utf-8")
+                self.assertEqual(propose_artifact(alias, artifact.resolve()), [])
+                self.assertIn(": Proposed", artifact.read_text(encoding="utf-8"))
+
+    def test_propose_reports_incomplete_artifact_under_noncanonical_root(self) -> None:
+        (self.root / "alternate spelling").mkdir()
+        alias = self.root / "alternate spelling" / ".."
+        artifact = self.root / "sdlc_artifacts/changes/0001-example.md"
+        artifact.write_text(
+            "## Summary\nWhat changed (1-3 sentences).\n"
+            "## Approval\n- **Status**: Draft\n",
+            encoding="utf-8",
+        )
+        before = artifact.read_bytes()
+        diagnostic = propose_artifact(alias, artifact.resolve())[0]
+        self.assertEqual(diagnostic.code, "ARTIFACT_PLACEHOLDER")
+        self.assertEqual(diagnostic.path, "sdlc_artifacts/changes/0001-example.md")
+        self.assertEqual(artifact.read_bytes(), before)
+
+    def test_propose_keeps_artifact_boundary_under_noncanonical_root(self) -> None:
+        (self.root / "alternate spelling").mkdir()
+        alias = self.root / "alternate spelling" / ".."
+        outside = self.root / "outside.md"
+        outside.write_text(complete_change(), encoding="utf-8")
+        before = outside.read_bytes()
+        diagnostic = propose_artifact(alias, alias / "outside.md")[0]
+        self.assertEqual(diagnostic.code, "ARTIFACT_PATH_INVALID")
+        self.assertEqual(outside.read_bytes(), before)
+
     def test_oversized_state_is_warning(self) -> None:
         state = self.root / "sdlc_artifacts" / "STATE.md"
         state.write_text("# State\n" + ("history " * 700), encoding="utf-8")

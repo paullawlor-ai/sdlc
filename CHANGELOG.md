@@ -2,6 +2,9 @@
 
 ## 0.3.0 - Unreleased
 
+- Normalize project and artifact paths consistently when proposing or finalizing
+  changes, including Windows short/long directory aliases used by hosted CI.
+
 - Removed retired folder placeholders, unused internal setup helpers and starter
   models/dependencies; corrected stale starter and approval instructions and
   added ignore rules for backups, temporary writes, and private notes.

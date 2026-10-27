@@ -1,0 +1,1293 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-27T22:44:45.185219+00:00",
+  "revision": "473726449135264390c8d8733cbc14afc9919196",
+  "source_manifest": {
+    ".gitignore": "0d824b8e5e8bbf4d4010f060d26230c5d37ee833e1e8786ff730f0621f166aa0",
+    "AGENTS.md": "4fa0d49348dd3011005c879379c21dcdbd8ad840e6378bf3ff91d84cd31e5b17",
+    "CHANGELOG.md": "30a808cafc01ef6d4f50e6e08e664d1ec6e698f0459f59c858f1f0e6423bb426",
+    "CONTRIBUTING.md": "e44eed6d194b5a49265a33fed478eb244a9021fcccc942151a7ee8368daac4b3",
+    "README.md": "e04fec8a44930c9ebaa86d1857cb56b52b29c0b1be56ada49bbd0b1d6670caae",
+    "SECURITY.md": "862e9507508b303e90c448fe1fa43ca99a533568dde7510b3d44fe8d7188ece3",
+    "VERSION": "d915cc95d6ca8f47ae297713ed46d4e5c5d99ddd29fc3c61e263bdf305f2b5b0",
+    "requirements-dev.txt": "a8af24a544227811f37a14f0a54a6cb1d6ddf0b7b9e45dc9f7160c47f52f1b25",
+    "ruff.toml": "8e8777c0a2c6f064d313e1ff4eb5da7a048d23372570e43fa27d0af860bba8d5",
+    ".github/workflows/framework-ci.yml": "44a108f83f19592ae7874147754e1d3ae4a0390dc63c23036714cc05ace0ebe0",
+    "adapters/README.md": "75a8c9f737dbbe65b313f941eec044f1859faa002c23a62305fac2f972503665",
+    "adapters/claude/README.md": "988be388206d2df18c9b1df96137354cd624d72409f592ab0fa18b505a5e17f7",
+    "adapters/claude/settings.json": "827e93ce8dd503b8badc86df68aadbaaa9b036ae3781ee7ad50d19b271ce3e0b",
+    "adapters/codex/AGENTS.md": "09333702043e23d883226340828528b6cacef7a913f37452fefc718f2625ad53",
+    "adapters/copilot/copilot-instructions.md": "09333702043e23d883226340828528b6cacef7a913f37452fefc718f2625ad53",
+    "adapters/copilot/instructions/sdlc.instructions.md": "cce30a7cb413359411d4621a470211551084e190f595a8d302429b6e166869cb",
+    "adapters/cursor/rules/README.md": "3e9c4fedb3af1141c68647cbbfecc61b86ae47ff0a697bc53c0de2b5fc4ff39f",
+    "adapters/cursor/rules/agents.mdc": "a538aeeb4945f4652ea4dca1ed859b315c235c4b7e3d722994feabad71703d65",
+    "adapters/cursor/rules/core.mdc": "cb695909f91bf623a19cf5dc53dedada20c7f3d470aea4eafe9659090b4bff7e",
+    "adapters/cursor/rules/implementation-gate.mdc": "c87711f5cf93c06dacd1f2328ed78f1727cbc978f11cb18cccb16e1b2a6513f3",
+    "adapters/cursor/rules/security.mdc": "0b690e0510f5973bf0b1d5a1183ee67c97dd78e74b81b50aea116ae8290ac29a",
+    "agents/README.md": "c0e11ec15b1806b29c9d826cddcc407912e8605219b16019a126b98ef6efa7a5",
+    "agents/architect.md": "a0a23326d4dbcc065cc789e2d536e267f77bac7cf4b040875e6943e9a17096e7",
+    "agents/developer.md": "409840c32cb194e4d9a47762586763300cd0bed19d12767a85df20853acfd915",
+    "agents/devops.md": "2a05989e455379bcc03d827887ca0ef59a84ba6d258b33ab8582157bbb9450a3",
+    "agents/docs-writer.md": "aad42f55acbd0945895e596c3fd298921b9bbf3246b9e3e97783dded04cf3516",
+    "agents/orchestrator.md": "08209b5cbe48ee1ef67bc61b3016bd8942b40655a9dd1f7bcc5c6ea76be4a9e7",
+    "agents/requirements-analyst.md": "ac62062959ea4b35b6ec4e36daf54ad75e6fc28d3eb47413796dacbc8b80e7f5",
+    "agents/security-reviewer.md": "05544e409e7ace5c256fcca1545e21702f10237f960663a609f46cd744a6c551",
+    "agents/tester.md": "729f2dc2aa48cdf6568fe8b624ac37796beaeca0dd832c3bc5b83f009184c5d3",
+    "agents/web-designer.md": "90c9bedf68abb718e1aa98be97896764f8f073baa3053d0f10c673231518649b",
+    "catalogs/README.md": "fcf715da3d07f4797dbef0c03ecf1bffac53da92c7d0ffaebf5fb97bb9f16c90",
+    "catalogs/owasp-llm-top10-summary.md": "b1477f581f240660f319be404c3c7c1e406587c71cd58c46486d8a80f87e4e79",
+    "catalogs/owasp-secure-coding-100.md": "270810457d5b9b4d8ccdec1f1ec4b3f4236b85177a2f2f7d64d6a00250a3c9c7",
+    "catalogs/owasp-top10-web-summary.md": "a5bc0534a837eeef32b7d20c2f83926f6ebf4e14cd42e58699c8cd297e7c778e",
+    "catalogs/sdlc-checklist.md": "07936b362ceff1e998067311c446c3ee39acb6ef0c0a324c450aa1cc6c884474",
+    "codex-review/further-remediation-plan.md": "994f0a9d89ed13162fdbbb0ddbad9483cfd341146a51e4486c2897f86e3398a7",
+    "codex-review/implementation-report.md": "150669e4a31c22c7845ed05454d3c9c4424b9678f29b36ad27eb21b597ffda9a",
+    "codex-review/remediation-plan.md": "eed2a33d633bae0dab725ac2f7d6ed91e0739ef9988e9129f25aaa2139e1daf5",
+    "docs/framework/agent-system.md": "2a296b129d2b2856a5c30566d3972f8df1d00fa76e7ffd22deea2fb0167d7402",
+    "docs/framework/assistant-adapters.md": "9030ec3506b34b131037f2f0f663e5594f03061783349f0b68c717a4d8d426f8",
+    "docs/framework/assistant-quickstart.md": "4e1ab82919761adbcd6cac365d5f67370f9c1967ecfce9e36a6b615df8d6b1be",
+    "docs/framework/external-enforcement-agent.md": "8696fd041c540ac7c44b55f9c68e9f4443868510e9acd40f43edc42be8920476",
+    "docs/framework/faq.md": "f5d09ad8517a4a68ddb696d7b44867b739068d2f9fb23b376d35320b662dfc4e",
+    "docs/framework/getting-started.md": "14ba7893c3aa2aadb3cba4d8190642f3ad99b5b8ac486ced9f4346c859b46e60",
+    "docs/framework/installation-modes.md": "a166b7a653ce5798eb7c8636011c245ac3fe0b003d595a9c0efb124f8a7f34ab",
+    "docs/framework/lifecycle-example.md": "ebb73f9d93cd7c87ce705c4c215ecddcaf86aca6e4bc4e4d0f11729656dbb9a9",
+    "docs/framework/policy-profiles.md": "5d5839dad78a12b95f74c99b88f5613b023fdf2f757a827ecdc938913ebf5725",
+    "docs/framework/quality-and-security.md": "307e5a944c69985f8a87ad52046057277d843d2e347cc33ac7be016713b99cc1",
+    "docs/framework/releasing.md": "5303b6ff37fcfe60d76511ae2e3f9f8e563e2862d19f5978363eb9c2ca6ccabb",
+    "docs/framework/sdlc-phases.md": "dbbd3e1a7508020106d644cd5bb58552fd72c4f69281f18ad4f1356aa831ad2a",
+    "docs/framework/starter-templates.md": "3473f2d99da07e4b175cc0e87a85ff54ac38b5d54c19818bd05c19189af7e5d3",
+    "docs/framework/structured-artifacts.md": "b47b37720d77204288098b206261dcb4d5740a21e81f03fe65d76c918cfdefa7",
+    "docs/framework/upgrading.md": "74bb415facd20e74aeed2e6c98770efdb7eefc9a3f8584381cba68d00786c240",
+    "docs/security/security-baselines.md": "0191fb3be16ad632b1b5c1e03e1658287621bf67fddef4832a3d73a3e8a83d88",
+    "docs/security/owasp/README.md": "1190166aa5d35aaf3b877a996dadbc2fb812e9490594b03205f950421eb82df1",
+    "docs/security/profiles/README.md": "1cf35b670d71c7eff3326b8cf27a1b46faa1e9257069c6e886e60e1c19d92ae3",
+    "examples/README.md": "1b84aac4a84a3fc31ea12dc9ada8b3a25f36fb6e14ca59c87fb456fd2756bd0a",
+    "examples/adr/ADR-0004-notification-delivery.md": "fa7d4dd3c43b400c50cc27d68ce24fc34c7d6c9ce97829bf956dbce6059f9405",
+    "examples/changes/0005-plant-health-log.md": "dc9c6e375f6bd19c2c0e3ef79171409856fe5388684b4ab3112fc535eae33a18",
+    "policy/sdlc-policy.json": "2a6c2def3d13f81e39e363d716c8cbeeb5ef2ed18f550f7f0f3605bf6bf69f40",
+    "policy/token-baseline.json": "a003ea32c40f6115f02fd86435e6ddee7fd3ebd3bcccae099ca909dcb9a26e64",
+    "prompts/bootstrap.md": "fa7fea402129ed048646de2a0c2fffe75607c2a489dc2c99527463ddcba45fb0",
+    "prompts/continue.md": "defd8f156a8157326aecb5503536cb3ac68d4296afc7e3bbfcd59d97280351c0",
+    "prompts/onboard.md": "8f92215a07a8f78a0bc053ac62629dbeeb2db84df0254d5b7de1c93670311493",
+    "prompts/quick-status.md": "05387218a3f663fe86ed4903da205e7ca78925e9c1fd403742ca033613adf36e",
+    "prompts/phase-specific/deployment.md": "4b6c66723cc0614dd432f5d426d411c9555dd3c0cf12b2e0a97f6ddb2b2e2f05",
+    "prompts/phase-specific/design.md": "eed5d095f6be4f9d715ca4ba7f41c2167a72f667cb34ebcdc5af612a19a93b0a",
+    "prompts/phase-specific/docs.md": "714f6870ff3f864a07aad4a4d0bd50b054d6fc0cf92b4b6e64fab48770b8f903",
+    "prompts/phase-specific/implementation.md": "dcea618e29af62ccbe4b0ae38eba7cfe20f6bd4a1d9ea58e77877d53a970a7fb",
+    "prompts/phase-specific/requirements.md": "983366143a7a45a3e62cee6c12497ad09a4c84537aa690d2e30551b94a1d364e",
+    "prompts/phase-specific/security-review.md": "315398f142a9123bd2634d2e118bc5558494360905af09c5fed2f28157ecd274",
+    "prompts/phase-specific/testing.md": "f1e339a4e82e655373ff6ab68c8fdb0b5302d2ba5074646dfee7c2d945ded5ac",
+    "prompts/phase-specific/web-design.md": "0f75883ec1cd3d2bcd14f2021e984b3b072126b7823773b14ad13ea34a0c5174",
+    "scripts/_artifacts.py": "ce2e47dc4b84803e93c50b9eb0956915bddd627112311279959d946b3afc5d0c",
+    "scripts/_fields.py": "6c163c3f02e6a3c3ec327bc5e21ab92244083fc0ee0b467584d082389575b44c",
+    "scripts/_paths.py": "1e4a5c3671067c8d8714f61be3977c1bc41ea190049b1e662aa4d00a7349936a",
+    "scripts/_policy.py": "6a3bc148332a9a8d295381617037d40fe01c5605ae22e10b4bf445e1ca03238d",
+    "scripts/_readiness.py": "8406b5a8489d6988aea1c6f9e2fa6bd55b16f9eb378d1a0cddb0ba1f1a716df6",
+    "scripts/_security.py": "4dd71c154a3d20677c46259acf203734d1df20a183d932a2071f384a3644ece3",
+    "scripts/_setup.py": "7893f1522450c8fcc9a786eaa1a25f5192d0ad3eb2875e18399b2e9797b65cb9",
+    "scripts/generate_adapters.py": "ea52e4d4e75d73bec72adea44edd220db1b753d09e722c88367d8f23798704b8",
+    "scripts/init_project.py": "2ff9cde3a703c5c33fd0c71dc57222680560bffc1b002b2c2b9da086d490f988",
+    "scripts/install_hooks.py": "7cb37c61814e31bb232e93193a27afb6fc23f6c576add3fb5e4e2ca9fd4a0ac7",
+    "scripts/new_adr.py": "6be2d6892c88b13f4ba8e9bcc2b94c9987b52365dc939b88d0564b4164091234",
+    "scripts/new_change.py": "d953e3f4a0d9a28feae85af15f7d19fa4e03b01595f2fa4c9ae9ba687c0b7ee6",
+    "scripts/new_requirement.py": "1af730f520cba9641e94660319a66d3316e473a384c2193feac9488f245094a5",
+    "scripts/new_retrospective.py": "b513f25348eb7afa0a2800367dcb07b3336957314c603cb4e4855ea0d9b3b765",
+    "scripts/new_review.py": "f3dafb8ffc7c4b419238b44c0d14235d60a1f44478decc86b8dce2897969d284",
+    "scripts/new_state.py": "11ce5be13fc4ec969653298247cf3e4a665260d5e91d1d7411e4b3cf4bd7f767",
+    "scripts/release_check.py": "9f82b1c0208f84d29345849e9f75e9c5eaf8b24e2d0b205b5fbca09da9c703c6",
+    "scripts/sdlc.py": "44ab7ade3a364d2c988609b6e9ffca45f0427db3b151c7aca5dae8b1a5c11c67",
+    "scripts/security_scan.py": "302f28877943a60605634fe054f4617be145828543481219fe325eba80eba74a",
+    "scripts/setup_project.py": "5aa850583f1a483977a542ecb65fca4f735a692126b4431172cd055325f883f8",
+    "scripts/status.py": "2ad465c53b17dedf28fe09e4d3b90de1fd31e70a2531f61e8c20bdc76eca1687",
+    "scripts/token_report.py": "0ab971f9dedc6cf492a666027eb283a07872665934535d2a4236106a244bad0b",
+    "scripts/verify_setup.py": "49181544241f618e4641b66ac6b4873fc84d8ca65fa0707d61997796a117be3d",
+    "scripts/hooks/_gate_common.py": "834e10488e804e2f5e30771316dd3565ecb154ae4654d70747484332bbbce3ee",
+    "scripts/hooks/approval_field_guard.py": "b66a21cdb78fb4ee6e569bcf6ce467332df4583415f75570654f3e7fb83197b8",
+    "scripts/hooks/bash_gate.py": "9aae92b42c82f68118754b23cb4393adf327336f3d1f36d0eaa6333f98f9a008",
+    "scripts/hooks/implementation_gate.py": "c01e76eefd070a603110be70900abc527fb90837c8663ee04a88f89fdd856533",
+    "scripts/hooks/session_end_reminder.py": "773aba3b72b9138c0543c9d38c51f9326869fc8838d3195fe7145a692eb49ba0",
+    "templates/documents/adr.md": "6c277626e0ca8f41ba03d665e31648a74afa127587ea58841ab7d45dbbdbf0e1",
+    "templates/documents/change-proposal.md": "cd841ba30c0c81be757c470abfb7ee4019827d11ebc50040d68f6f9613f11ccd",
+    "templates/documents/config.json": "f35d4b6a3eaf9402a9bd44118910a75c3f2849c69cd2f74904b1742809667093",
+    "templates/documents/deployment-runbook.md": "7569090a47e00be6031f56a034308c2d9dd6a162c77f98028b729d4f751e42fd",
+    "templates/documents/project-context.md": "c638d15a1e2ea58d88a705834558d758f9858a9e269f67490c4e445fb5930fb8",
+    "templates/documents/requirement.md": "7e8974e5ec3e2eff62b98e22888aae86ea265a118aa2a24027b733a4d3303bc4",
+    "templates/documents/retrospective.md": "a8478076a1979c023a4d07b7a2a4af530d59322eac7ea23e1e9f12bfb63eb486",
+    "templates/documents/review.md": "1c32956d8c7e592a2a9585244004ea64259dbb343340b918b73c74e9b502095c",
+    "templates/documents/security-policy.md": "63312c769ccc4b458cdc7444307a60ce65c85dc57014d9361415095003fc89a3",
+    "templates/documents/state.md": "d7822eb0b2226681d6b447f8400c2d8497cc02c9032243a5b79dbeba8234753a",
+    "templates/documents/test-plan.md": "3aa1e6af1d8adb40e1a3df4008166d6e552909721b7ac1c8ba1c2245eef69bcd",
+    "templates/documents/user-story.md": "81caec74b19b2ade130f57a0a146813b4bd8026d3e1f34342c01b101f2674c57",
+    "templates/projects/python-chatbot/README.md": "488b09dc418a262244c78ff93910cedcc6954a8d3528aa9c7e207e86996c7a66",
+    "templates/projects/python-chatbot/requirements-dev.txt": "a8af24a544227811f37a14f0a54a6cb1d6ddf0b7b9e45dc9f7160c47f52f1b25",
+    "templates/projects/python-chatbot/requirements.txt": "cf9a235512c163ab8036d1753ee8e8e7e33a88fbb9edfa4a037812b21d4d9094",
+    "templates/projects/python-chatbot/ruff.toml": "8e8777c0a2c6f064d313e1ff4eb5da7a048d23372570e43fa27d0af860bba8d5",
+    "templates/projects/python-chatbot/app/__init__.py": "c9a8ba35c1fd395950224432aa6cb18ab849feaacd6a8f85a6065c73c31cfe76",
+    "templates/projects/python-chatbot/app/config.py": "048ea294c41d47efe40206ad997c7146d15bbec87fbe195f3c56a9c6d7e9fa90",
+    "templates/projects/python-chatbot/app/main.py": "6c5e731bfaba1719c73a4c17fbb4d74e77b87d303e70b98931fc3c7bce38e554",
+    "templates/projects/python-chatbot/app/chat/__init__.py": "49b74a64345f912e7d48756316697988dda45e6870e71d457792776b9470dcdc",
+    "templates/projects/python-chatbot/app/chat/engine.py": "2728f0a690a04acb9a4922f689a0e2793b82c83d596c5163d9e998815d26859f",
+    "templates/projects/python-chatbot/app/chat/memory.py": "9b87aeb6ab5a2fcf6c99755a4b54e550afbf2f50721db79536a528444e1aab67",
+    "templates/projects/python-chatbot/app/chat/prompts.py": "7a72b46dcbaf8b539115d23050a67cc44cdfb350d96a455f67cc9cfcb9281a98",
+    "templates/projects/python-chatbot/app/rag/__init__.py": "8b31006c098f783bc83f3d983a52248ffbd8bba58afe864b7ea677dc809bdc4e",
+    "templates/projects/python-chatbot/app/rag/retriever.py": "58cda4b27b02188ea013b1e93a2f43afb4c618c148c1485b95f13bd9069d961f",
+    "templates/projects/python-chatbot/app/safety/__init__.py": "86a281c14478da60ecc64c92de2942fac27047c7464537b68761a508579eacaf",
+    "templates/projects/python-chatbot/app/safety/input.py": "60f0e767947d3b012666c2ad0dbb4fa09afa8daf551a5e0e6ef71de993ea03fb",
+    "templates/projects/python-chatbot/app/safety/output.py": "0052863306738e54a57a12f043465ce65ffd9b66429bcf3ba597aaefc577a15d",
+    "templates/projects/python-chatbot/app/utils/__init__.py": "f2517746612e993e86e78916d719208efd59f27236a6d014ee7d421e2d240b64",
+    "templates/projects/python-chatbot/app/utils/logging.py": "62fadc556a97e5d1cd4beee61f93a544df9809b524cc89902ee8541d9a1f9bf0",
+    "templates/projects/python-chatbot/tests/__init__.py": "b2b75d2c18e9c040056c859c9513e2da18ead8454058abd31813d59a368f3c63",
+    "templates/projects/python-chatbot/tests/test_smoke.py": "0113b13d9f2ee48932a4e9488e0b6cd88ac387df998229c3cd5573004bdf6e76",
+    "templates/projects/python-cli/README.md": "850aeccd640c86bfd5a04009e62b772c91c741b14dac120b5d2a44a0e74a8fcb",
+    "templates/projects/python-cli/requirements-dev.txt": "a8af24a544227811f37a14f0a54a6cb1d6ddf0b7b9e45dc9f7160c47f52f1b25",
+    "templates/projects/python-cli/requirements.txt": "b822763c7352531c920c8da1fa7c8d4b92a59bb232590333e6d42ab464825d8a",
+    "templates/projects/python-cli/ruff.toml": "8e8777c0a2c6f064d313e1ff4eb5da7a048d23372570e43fa27d0af860bba8d5",
+    "templates/projects/python-cli/app/__init__.py": "6b8140259d4746aadfedc2f136e43a1bf7c9108872d589bfb6857c64be252f9a",
+    "templates/projects/python-cli/app/cli.py": "2fe651a667e5cfeae6ad6fd00985cd3a4ee73ac2c6dd34a04a3e5d8a7c7824bd",
+    "templates/projects/python-cli/app/commands/__init__.py": "66d63b13fb4b620ceb04f04c90811e1fba7b4be659739770de3fb74628a4d239",
+    "templates/projects/python-cli/app/commands/example.py": "8edbe75f6f55dc9ae393f5ccd220501802e6418edb03bac3172f7eb435cdf9a5",
+    "templates/projects/python-cli/tests/__init__.py": "b2b75d2c18e9c040056c859c9513e2da18ead8454058abd31813d59a368f3c63",
+    "templates/projects/python-cli/tests/test_smoke.py": "e22ed96d3d850308b9bc50098371211240d3cc9ed948bef12b3f623d8c3028a7",
+    "templates/projects/python-fastapi-ai/Dockerfile": "db958b74e3efa9b907ea4ccacf3ae10047f5c2d65b11bb0c5f98f9d56d336479",
+    "templates/projects/python-fastapi-ai/README.md": "49bf26973586a44fe8361e5598ed69dfe967d7ea2450abdc13a1dff838b889a5",
+    "templates/projects/python-fastapi-ai/requirements-dev.txt": "a8af24a544227811f37a14f0a54a6cb1d6ddf0b7b9e45dc9f7160c47f52f1b25",
+    "templates/projects/python-fastapi-ai/requirements.txt": "5637b19e0ad2ce1d1e910901ebc40af3faebd0c6192b58b114600b3351fc1131",
+    "templates/projects/python-fastapi-ai/ruff.toml": "8e8777c0a2c6f064d313e1ff4eb5da7a048d23372570e43fa27d0af860bba8d5",
+    "templates/projects/python-fastapi-ai/app/__init__.py": "47d990faf14df580810f4a25f8f0681fb4b023eb214977399a3e6414b80d3422",
+    "templates/projects/python-fastapi-ai/app/config.py": "1e6959e275b62931ca076ea2d3440a6f14c2b7cf54bccbc21a589cc67dea2f3f",
+    "templates/projects/python-fastapi-ai/app/main.py": "8941a446e072bbbe0f267403d3ae6b41e386ab0b0725f2fb40d8659d3403e523",
+    "templates/projects/python-fastapi-ai/app/api/__init__.py": "42d4dddbecad7da547ea5f5a27de02efdad756dc025731b977cbc1c7b6368cd0",
+    "templates/projects/python-fastapi-ai/app/api/dependencies.py": "41414bd4afd4c480f8bb176d6723d55ed5da4c0b61d4115726a3af45bbdce9fe",
+    "templates/projects/python-fastapi-ai/app/api/routes.py": "e9c35a4d126f699622fbdf55f22dbe7f0e8c692b959797fa432ccbcfb07d4205",
+    "templates/projects/python-fastapi-ai/app/core/__init__.py": "69063ebe47c670cd5d9f3a3335879af67ac8567fb76fe1af8bdf84e6079b9ae1",
+    "templates/projects/python-fastapi-ai/app/core/logging.py": "118605908dbbb17564aab94d8a78aa406ce2cf5d4f98395df83154e535687a7c",
+    "templates/projects/python-fastapi-ai/app/core/rate_limit.py": "6d88ec141154ad2c229328e63d8a42daf5cb935c704eaab8b34d2c352b7c87eb",
+    "templates/projects/python-fastapi-ai/app/llm/__init__.py": "9c48e0abd7554b7a13747fbf8c1560598fe55e674fa0ddea1d8588e2c5fca1b1",
+    "templates/projects/python-fastapi-ai/app/llm/client.py": "7b09be2cdb1fde567879be1df1be1b621b5ea5028498490e86496432f67a14f0",
+    "templates/projects/python-fastapi-ai/app/llm/safety.py": "50ff9798660a944073128cefa54486b1749775596ce70fdf78a255e85905efe4",
+    "templates/projects/python-fastapi-ai/tests/__init__.py": "b2b75d2c18e9c040056c859c9513e2da18ead8454058abd31813d59a368f3c63",
+    "templates/projects/python-fastapi-ai/tests/conftest.py": "e052c09aa90a74689de45da6aec5447b0d244a434e938a7b4f8f0d60545c0b4a",
+    "templates/projects/python-fastapi-ai/tests/test_api.py": "ceae3a7697e455170ddfb34d4fa32bfeba3e409c52204b534512465cd5f787f5",
+    "templates/projects/python-fastapi-ai/tests/test_safety.py": "5761efaf5146cbd183e5bcc45f4a41be6d308133228851dbe4741833614a16bc",
+    "tests/__init__.py": "254f77570bb420c6065d8e370f7ce349dc80da44739a9be5b9bcef34e8920b49",
+    "tests/security_fixtures.py": "d14fcc8f6e4e11a8c98a08f2da61ade0d68cb6bcb8320ebfcc96efd9ddb799ac",
+    "tests/test_approval_field_guard.py": "ed501c085b8ced9055b47f4fe4319d4627cf062bc6dd68d85faffd081733dd87",
+    "tests/test_artifacts.py": "b03c970430eeb71fd2dd1e2990f2a9105b0e9160406cf3cbb62a2cf73d15df6d",
+    "tests/test_cli.py": "036a712e318b3ac3d6ab483d02cec7967fce4aff7ffddac0eb4b265d83dcfd7c",
+    "tests/test_end_to_end.py": "4393b67fd8160436feb8f9382bffb0ae45ce2fffa3a8debcdcc2948295f6f5a4",
+    "tests/test_fields.py": "1602981b7d6a943f6d26a1b428f4de7d2214dec0ae06a66000a5969b1f58b1e5",
+    "tests/test_gate_common.py": "33a619364b5af1f121f80b956d86f7d129ec31a27314bf0b466039153db47958",
+    "tests/test_lifecycle.py": "e21dcf92f684f2f0e3c350a5e32aaec994ec026a23359a89327c25c86114cafd",
+    "tests/test_policy.py": "da781766353f6f5dd5ca67fcbbd68904f957e93b3402c20cba822ee2b7932670",
+    "tests/test_readiness.py": "fb51d7c2c31cc4a4bd85df1f24b95617afcb983d3b4de779935c93f98590b001",
+    "tests/test_release.py": "71b80ccdfb2eba08f640582bb92c09ebe86b67bd393ac55f77c4fdeb17f56756",
+    "tests/test_security.py": "a56f12e450d8e6d22a358999c75b6585cf8a29c05563e8dcd08ebb0685e57705",
+    "tests/test_setup.py": "60e96580794201d45e44fc471b943faf0b9f624257f6f40f7718705d47301eb1",
+    "tests/test_status.py": "7dd979f6b817843296a0422278bea1bf566033fae9aceaf34fb0a33aff1cf50a",
+    "tests/test_templates.py": "7303f788bcc7e28095695966a3464ef5d214213afa69134fbf674b581d4e6aa2",
+    "workflows/01-requirements.md": "a5e21e8bc3cb584dff3de6a3a0ec43aaefe017faa3f9509bc263f7d0f34f57ab",
+    "workflows/02-design.md": "8307771838c5a048123ca036c25471b6a46041efba8822ea9e148e1bf10db30a",
+    "workflows/03-implementation.md": "c651d80d323ad0855ca5880ea0414b0731397002908874e97b27432b5df97e86",
+    "workflows/04-testing.md": "23cfc524a1f7eeaf0b98f4d353b988b1b47fed92cd04bf7b813bdacd311991ce",
+    "workflows/05-security-review.md": "7f819be3e5f32311ad16b1ba532d846e1813f1ef949c6b7b430f0bf1b676785a",
+    "workflows/06-deployment.md": "62e66018bf0f74022a8bfedb259a753fabe8e9abf77559e676bf9ab9142a1291",
+    "workflows/07-iterate.md": "29f5a22d6cdb30391fb99649d05c6ed6b6ac7710e43eefe519cdcc367810e9a8",
+    "workflows/README.md": "9e02d3fb5b5b78622adba96dd3c48d73125627d7012d04767712dc436343da52"
+  },
+  "source_digest": "5ae99f33e527688975789a0b3aa6cfc9e07c290d55f0fea713c23d8e3f4c5504",
+  "scans": [
+    {
+      "tool": "bandit",
+      "version": "1.8.6",
+      "scope": [
+        "scripts/_artifacts.py",
+        "scripts/_fields.py",
+        "scripts/_paths.py",
+        "scripts/_policy.py",
+        "scripts/_readiness.py",
+        "scripts/_security.py",
+        "scripts/_setup.py",
+        "scripts/generate_adapters.py",
+        "scripts/hooks/_gate_common.py",
+        "scripts/hooks/approval_field_guard.py",
+        "scripts/hooks/bash_gate.py",
+        "scripts/hooks/implementation_gate.py",
+        "scripts/hooks/session_end_reminder.py",
+        "scripts/init_project.py",
+        "scripts/install_hooks.py",
+        "scripts/new_adr.py",
+        "scripts/new_change.py",
+        "scripts/new_requirement.py",
+        "scripts/new_retrospective.py",
+        "scripts/new_review.py",
+        "scripts/new_state.py",
+        "scripts/release_check.py",
+        "scripts/sdlc.py",
+        "scripts/security_scan.py",
+        "scripts/setup_project.py",
+        "scripts/status.py",
+        "scripts/token_report.py",
+        "scripts/verify_setup.py",
+        "templates/projects/python-chatbot/app/__init__.py",
+        "templates/projects/python-chatbot/app/chat/__init__.py",
+        "templates/projects/python-chatbot/app/chat/engine.py",
+        "templates/projects/python-chatbot/app/chat/memory.py",
+        "templates/projects/python-chatbot/app/chat/prompts.py",
+        "templates/projects/python-chatbot/app/config.py",
+        "templates/projects/python-chatbot/app/main.py",
+        "templates/projects/python-chatbot/app/rag/__init__.py",
+        "templates/projects/python-chatbot/app/rag/retriever.py",
+        "templates/projects/python-chatbot/app/safety/__init__.py",
+        "templates/projects/python-chatbot/app/safety/input.py",
+        "templates/projects/python-chatbot/app/safety/output.py",
+        "templates/projects/python-chatbot/app/utils/__init__.py",
+        "templates/projects/python-chatbot/app/utils/logging.py",
+        "templates/projects/python-cli/app/__init__.py",
+        "templates/projects/python-cli/app/cli.py",
+        "templates/projects/python-cli/app/commands/__init__.py",
+        "templates/projects/python-cli/app/commands/example.py",
+        "templates/projects/python-fastapi-ai/app/__init__.py",
+        "templates/projects/python-fastapi-ai/app/api/__init__.py",
+        "templates/projects/python-fastapi-ai/app/api/dependencies.py",
+        "templates/projects/python-fastapi-ai/app/api/routes.py",
+        "templates/projects/python-fastapi-ai/app/config.py",
+        "templates/projects/python-fastapi-ai/app/core/__init__.py",
+        "templates/projects/python-fastapi-ai/app/core/logging.py",
+        "templates/projects/python-fastapi-ai/app/core/rate_limit.py",
+        "templates/projects/python-fastapi-ai/app/llm/__init__.py",
+        "templates/projects/python-fastapi-ai/app/llm/client.py",
+        "templates/projects/python-fastapi-ai/app/llm/safety.py",
+        "templates/projects/python-fastapi-ai/app/main.py"
+      ],
+      "status": "passed",
+      "findings": []
+    },
+    {
+      "tool": "detect-secrets",
+      "version": "1.5.0",
+      "scope": [
+        ".github/workflows/framework-ci.yml",
+        ".gitignore",
+        "AGENTS.md",
+        "CHANGELOG.md",
+        "CONTRIBUTING.md",
+        "README.md",
+        "SECURITY.md",
+        "VERSION",
+        "adapters/README.md",
+        "adapters/claude/README.md",
+        "adapters/claude/settings.json",
+        "adapters/codex/AGENTS.md",
+        "adapters/copilot/copilot-instructions.md",
+        "adapters/copilot/instructions/sdlc.instructions.md",
+        "adapters/cursor/rules/README.md",
+        "adapters/cursor/rules/agents.mdc",
+        "adapters/cursor/rules/core.mdc",
+        "adapters/cursor/rules/implementation-gate.mdc",
+        "adapters/cursor/rules/security.mdc",
+        "agents/README.md",
+        "agents/architect.md",
+        "agents/developer.md",
+        "agents/devops.md",
+        "agents/docs-writer.md",
+        "agents/orchestrator.md",
+        "agents/requirements-analyst.md",
+        "agents/security-reviewer.md",
+        "agents/tester.md",
+        "agents/web-designer.md",
+        "catalogs/README.md",
+        "catalogs/owasp-llm-top10-summary.md",
+        "catalogs/owasp-secure-coding-100.md",
+        "catalogs/owasp-top10-web-summary.md",
+        "catalogs/sdlc-checklist.md",
+        "codex-review/further-remediation-plan.md",
+        "codex-review/implementation-report.md",
+        "codex-review/remediation-plan.md",
+        "docs/framework/agent-system.md",
+        "docs/framework/assistant-adapters.md",
+        "docs/framework/assistant-quickstart.md",
+        "docs/framework/external-enforcement-agent.md",
+        "docs/framework/faq.md",
+        "docs/framework/getting-started.md",
+        "docs/framework/installation-modes.md",
+        "docs/framework/lifecycle-example.md",
+        "docs/framework/policy-profiles.md",
+        "docs/framework/quality-and-security.md",
+        "docs/framework/releasing.md",
+        "docs/framework/sdlc-phases.md",
+        "docs/framework/starter-templates.md",
+        "docs/framework/structured-artifacts.md",
+        "docs/framework/upgrading.md",
+        "docs/security/owasp/README.md",
+        "docs/security/profiles/README.md",
+        "docs/security/security-baselines.md",
+        "examples/README.md",
+        "examples/adr/ADR-0004-notification-delivery.md",
+        "examples/changes/0005-plant-health-log.md",
+        "policy/sdlc-policy.json",
+        "policy/token-baseline.json",
+        "prompts/bootstrap.md",
+        "prompts/continue.md",
+        "prompts/onboard.md",
+        "prompts/phase-specific/deployment.md",
+        "prompts/phase-specific/design.md",
+        "prompts/phase-specific/docs.md",
+        "prompts/phase-specific/implementation.md",
+        "prompts/phase-specific/requirements.md",
+        "prompts/phase-specific/security-review.md",
+        "prompts/phase-specific/testing.md",
+        "prompts/phase-specific/web-design.md",
+        "prompts/quick-status.md",
+        "requirements-dev.txt",
+        "ruff.toml",
+        "scripts/_artifacts.py",
+        "scripts/_fields.py",
+        "scripts/_paths.py",
+        "scripts/_policy.py",
+        "scripts/_readiness.py",
+        "scripts/_security.py",
+        "scripts/_setup.py",
+        "scripts/generate_adapters.py",
+        "scripts/hooks/_gate_common.py",
+        "scripts/hooks/approval_field_guard.py",
+        "scripts/hooks/bash_gate.py",
+        "scripts/hooks/implementation_gate.py",
+        "scripts/hooks/session_end_reminder.py",
+        "scripts/init_project.py",
+        "scripts/install_hooks.py",
+        "scripts/new_adr.py",
+        "scripts/new_change.py",
+        "scripts/new_requirement.py",
+        "scripts/new_retrospective.py",
+        "scripts/new_review.py",
+        "scripts/new_state.py",
+        "scripts/release_check.py",
+        "scripts/sdlc.py",
+        "scripts/security_scan.py",
+        "scripts/setup_project.py",
+        "scripts/status.py",
+        "scripts/token_report.py",
+        "scripts/verify_setup.py",
+        "templates/documents/adr.md",
+        "templates/documents/change-proposal.md",
+        "templates/documents/config.json",
+        "templates/documents/deployment-runbook.md",
+        "templates/documents/project-context.md",
+        "templates/documents/requirement.md",
+        "templates/documents/retrospective.md",
+        "templates/documents/review.md",
+        "templates/documents/security-policy.md",
+        "templates/documents/state.md",
+        "templates/documents/test-plan.md",
+        "templates/documents/user-story.md",
+        "templates/projects/python-chatbot/README.md",
+        "templates/projects/python-chatbot/app/__init__.py",
+        "templates/projects/python-chatbot/app/chat/__init__.py",
+        "templates/projects/python-chatbot/app/chat/engine.py",
+        "templates/projects/python-chatbot/app/chat/memory.py",
+        "templates/projects/python-chatbot/app/chat/prompts.py",
+        "templates/projects/python-chatbot/app/config.py",
+        "templates/projects/python-chatbot/app/main.py",
+        "templates/projects/python-chatbot/app/rag/__init__.py",
+        "templates/projects/python-chatbot/app/rag/retriever.py",
+        "templates/projects/python-chatbot/app/safety/__init__.py",
+        "templates/projects/python-chatbot/app/safety/input.py",
+        "templates/projects/python-chatbot/app/safety/output.py",
+        "templates/projects/python-chatbot/app/utils/__init__.py",
+        "templates/projects/python-chatbot/app/utils/logging.py",
+        "templates/projects/python-chatbot/requirements-dev.txt",
+        "templates/projects/python-chatbot/requirements.txt",
+        "templates/projects/python-chatbot/ruff.toml",
+        "templates/projects/python-chatbot/tests/__init__.py",
+        "templates/projects/python-chatbot/tests/test_smoke.py",
+        "templates/projects/python-cli/README.md",
+        "templates/projects/python-cli/app/__init__.py",
+        "templates/projects/python-cli/app/cli.py",
+        "templates/projects/python-cli/app/commands/__init__.py",
+        "templates/projects/python-cli/app/commands/example.py",
+        "templates/projects/python-cli/requirements-dev.txt",
+        "templates/projects/python-cli/requirements.txt",
+        "templates/projects/python-cli/ruff.toml",
+        "templates/projects/python-cli/tests/__init__.py",
+        "templates/projects/python-cli/tests/test_smoke.py",
+        "templates/projects/python-fastapi-ai/Dockerfile",
+        "templates/projects/python-fastapi-ai/README.md",
+        "templates/projects/python-fastapi-ai/app/__init__.py",
+        "templates/projects/python-fastapi-ai/app/api/__init__.py",
+        "templates/projects/python-fastapi-ai/app/api/dependencies.py",
+        "templates/projects/python-fastapi-ai/app/api/routes.py",
+        "templates/projects/python-fastapi-ai/app/config.py",
+        "templates/projects/python-fastapi-ai/app/core/__init__.py",
+        "templates/projects/python-fastapi-ai/app/core/logging.py",
+        "templates/projects/python-fastapi-ai/app/core/rate_limit.py",
+        "templates/projects/python-fastapi-ai/app/llm/__init__.py",
+        "templates/projects/python-fastapi-ai/app/llm/client.py",
+        "templates/projects/python-fastapi-ai/app/llm/safety.py",
+        "templates/projects/python-fastapi-ai/app/main.py",
+        "templates/projects/python-fastapi-ai/requirements-dev.txt",
+        "templates/projects/python-fastapi-ai/requirements.txt",
+        "templates/projects/python-fastapi-ai/ruff.toml",
+        "templates/projects/python-fastapi-ai/tests/__init__.py",
+        "templates/projects/python-fastapi-ai/tests/conftest.py",
+        "templates/projects/python-fastapi-ai/tests/test_api.py",
+        "templates/projects/python-fastapi-ai/tests/test_safety.py",
+        "tests/__init__.py",
+        "tests/security_fixtures.py",
+        "tests/test_approval_field_guard.py",
+        "tests/test_artifacts.py",
+        "tests/test_cli.py",
+        "tests/test_end_to_end.py",
+        "tests/test_fields.py",
+        "tests/test_gate_common.py",
+        "tests/test_lifecycle.py",
+        "tests/test_policy.py",
+        "tests/test_readiness.py",
+        "tests/test_release.py",
+        "tests/test_security.py",
+        "tests/test_setup.py",
+        "tests/test_status.py",
+        "tests/test_templates.py",
+        "workflows/01-requirements.md",
+        "workflows/02-design.md",
+        "workflows/03-implementation.md",
+        "workflows/04-testing.md",
+        "workflows/05-security-review.md",
+        "workflows/06-deployment.md",
+        "workflows/07-iterate.md",
+        "workflows/README.md"
+      ],
+      "status": "passed",
+      "findings": []
+    },
+    {
+      "tool": "pip-audit",
+      "version": "2.9.0",
+      "scope": [
+        "requirements-dev.txt",
+        "templates/projects/python-chatbot/requirements-dev.txt",
+        "templates/projects/python-chatbot/requirements.txt",
+        "templates/projects/python-cli/requirements-dev.txt",
+        "templates/projects/python-cli/requirements.txt",
+        "templates/projects/python-fastapi-ai/requirements-dev.txt",
+        "templates/projects/python-fastapi-ai/requirements.txt"
+      ],
+      "status": "passed",
+      "findings": [],
+      "resolved_dependencies": [
+        {
+          "requirements": "requirements-dev.txt",
+          "packages": [
+            {
+              "name": "ruff",
+              "version": "0.14.2"
+            },
+            {
+              "name": "bandit",
+              "version": "1.8.6"
+            },
+            {
+              "name": "pip-audit",
+              "version": "2.9.0"
+            },
+            {
+              "name": "detect-secrets",
+              "version": "1.5.0"
+            },
+            {
+              "name": "cyclonedx-python-lib",
+              "version": "9.1.0"
+            },
+            {
+              "name": "license-expression",
+              "version": "30.4.4"
+            },
+            {
+              "name": "packageurl-python",
+              "version": "0.17.6"
+            },
+            {
+              "name": "py-serializable",
+              "version": "2.1.0"
+            },
+            {
+              "name": "defusedxml",
+              "version": "0.7.1"
+            },
+            {
+              "name": "sortedcontainers",
+              "version": "2.4.0"
+            },
+            {
+              "name": "boolean-py",
+              "version": "5.0"
+            },
+            {
+              "name": "cachecontrol",
+              "version": "0.14.4"
+            },
+            {
+              "name": "msgpack",
+              "version": "1.2.4"
+            },
+            {
+              "name": "colorama",
+              "version": "0.4.6"
+            },
+            {
+              "name": "filelock",
+              "version": "4.2.4"
+            },
+            {
+              "name": "pip-api",
+              "version": "0.0.35"
+            },
+            {
+              "name": "pip-requirements-parser",
+              "version": "32.0.1"
+            },
+            {
+              "name": "platformdirs",
+              "version": "4.13.6"
+            },
+            {
+              "name": "pyyaml",
+              "version": "6.0.3"
+            },
+            {
+              "name": "requests",
+              "version": "2.34.2"
+            },
+            {
+              "name": "charset-normalizer",
+              "version": "3.5.2"
+            },
+            {
+              "name": "idna",
+              "version": "3.20"
+            },
+            {
+              "name": "urllib3",
+              "version": "2.8.0"
+            },
+            {
+              "name": "certifi",
+              "version": "2026.10.23"
+            },
+            {
+              "name": "rich",
+              "version": "15.0.0"
+            },
+            {
+              "name": "pygments",
+              "version": "2.21.0"
+            },
+            {
+              "name": "markdown-it-py",
+              "version": "4.2.0"
+            },
+            {
+              "name": "mdurl",
+              "version": "0.1.2"
+            },
+            {
+              "name": "stevedore",
+              "version": "5.9.1"
+            },
+            {
+              "name": "toml",
+              "version": "0.10.2"
+            },
+            {
+              "name": "pyparsing",
+              "version": "3.3.3"
+            }
+          ]
+        },
+        {
+          "requirements": "templates/projects/python-chatbot/requirements-dev.txt",
+          "packages": [
+            {
+              "name": "ruff",
+              "version": "0.14.2"
+            },
+            {
+              "name": "bandit",
+              "version": "1.8.6"
+            },
+            {
+              "name": "pip-audit",
+              "version": "2.9.0"
+            },
+            {
+              "name": "detect-secrets",
+              "version": "1.5.0"
+            },
+            {
+              "name": "cyclonedx-python-lib",
+              "version": "9.1.0"
+            },
+            {
+              "name": "license-expression",
+              "version": "30.4.4"
+            },
+            {
+              "name": "packageurl-python",
+              "version": "0.17.6"
+            },
+            {
+              "name": "py-serializable",
+              "version": "2.1.0"
+            },
+            {
+              "name": "defusedxml",
+              "version": "0.7.1"
+            },
+            {
+              "name": "sortedcontainers",
+              "version": "2.4.0"
+            },
+            {
+              "name": "boolean-py",
+              "version": "5.0"
+            },
+            {
+              "name": "cachecontrol",
+              "version": "0.14.4"
+            },
+            {
+              "name": "msgpack",
+              "version": "1.2.4"
+            },
+            {
+              "name": "colorama",
+              "version": "0.4.6"
+            },
+            {
+              "name": "filelock",
+              "version": "4.2.4"
+            },
+            {
+              "name": "pip-api",
+              "version": "0.0.35"
+            },
+            {
+              "name": "pip-requirements-parser",
+              "version": "32.0.1"
+            },
+            {
+              "name": "platformdirs",
+              "version": "4.13.6"
+            },
+            {
+              "name": "pyyaml",
+              "version": "6.0.3"
+            },
+            {
+              "name": "requests",
+              "version": "2.34.2"
+            },
+            {
+              "name": "charset-normalizer",
+              "version": "3.5.2"
+            },
+            {
+              "name": "idna",
+              "version": "3.20"
+            },
+            {
+              "name": "urllib3",
+              "version": "2.8.0"
+            },
+            {
+              "name": "certifi",
+              "version": "2026.10.23"
+            },
+            {
+              "name": "rich",
+              "version": "15.0.0"
+            },
+            {
+              "name": "pygments",
+              "version": "2.21.0"
+            },
+            {
+              "name": "markdown-it-py",
+              "version": "4.2.0"
+            },
+            {
+              "name": "mdurl",
+              "version": "0.1.2"
+            },
+            {
+              "name": "stevedore",
+              "version": "5.9.1"
+            },
+            {
+              "name": "toml",
+              "version": "0.10.2"
+            },
+            {
+              "name": "pyparsing",
+              "version": "3.3.3"
+            }
+          ]
+        },
+        {
+          "requirements": "templates/projects/python-chatbot/requirements.txt",
+          "packages": [
+            {
+              "name": "httpx",
+              "version": "0.28.1"
+            },
+            {
+              "name": "pydantic",
+              "version": "2.14.1"
+            },
+            {
+              "name": "pydantic-core",
+              "version": "2.50.1"
+            },
+            {
+              "name": "pydantic-settings",
+              "version": "2.16.1"
+            },
+            {
+              "name": "structlog",
+              "version": "24.4.0"
+            },
+            {
+              "name": "rich",
+              "version": "13.9.4"
+            },
+            {
+              "name": "pytest",
+              "version": "9.2.0"
+            },
+            {
+              "name": "pytest-asyncio",
+              "version": "1.4.1"
+            },
+            {
+              "name": "httpcore",
+              "version": "1.0.9"
+            },
+            {
+              "name": "pluggy",
+              "version": "1.7.0"
+            },
+            {
+              "name": "pygments",
+              "version": "2.21.0"
+            },
+            {
+              "name": "annotated-types",
+              "version": "0.8.0"
+            },
+            {
+              "name": "colorama",
+              "version": "0.4.6"
+            },
+            {
+              "name": "h11",
+              "version": "0.16.0"
+            },
+            {
+              "name": "iniconfig",
+              "version": "2.3.1"
+            },
+            {
+              "name": "markdown-it-py",
+              "version": "4.2.0"
+            },
+            {
+              "name": "mdurl",
+              "version": "0.1.2"
+            },
+            {
+              "name": "python-dotenv",
+              "version": "1.2.4"
+            },
+            {
+              "name": "typing-extensions",
+              "version": "4.16.0"
+            },
+            {
+              "name": "typing-inspection",
+              "version": "0.4.4"
+            },
+            {
+              "name": "anyio",
+              "version": "4.15.1"
+            },
+            {
+              "name": "idna",
+              "version": "3.20"
+            },
+            {
+              "name": "certifi",
+              "version": "2026.10.23"
+            }
+          ]
+        },
+        {
+          "requirements": "templates/projects/python-cli/requirements-dev.txt",
+          "packages": [
+            {
+              "name": "ruff",
+              "version": "0.14.2"
+            },
+            {
+              "name": "bandit",
+              "version": "1.8.6"
+            },
+            {
+              "name": "pip-audit",
+              "version": "2.9.0"
+            },
+            {
+              "name": "detect-secrets",
+              "version": "1.5.0"
+            },
+            {
+              "name": "cyclonedx-python-lib",
+              "version": "9.1.0"
+            },
+            {
+              "name": "license-expression",
+              "version": "30.4.4"
+            },
+            {
+              "name": "packageurl-python",
+              "version": "0.17.6"
+            },
+            {
+              "name": "py-serializable",
+              "version": "2.1.0"
+            },
+            {
+              "name": "defusedxml",
+              "version": "0.7.1"
+            },
+            {
+              "name": "sortedcontainers",
+              "version": "2.4.0"
+            },
+            {
+              "name": "boolean-py",
+              "version": "5.0"
+            },
+            {
+              "name": "cachecontrol",
+              "version": "0.14.4"
+            },
+            {
+              "name": "msgpack",
+              "version": "1.2.4"
+            },
+            {
+              "name": "colorama",
+              "version": "0.4.6"
+            },
+            {
+              "name": "filelock",
+              "version": "4.2.4"
+            },
+            {
+              "name": "pip-api",
+              "version": "0.0.35"
+            },
+            {
+              "name": "pip-requirements-parser",
+              "version": "32.0.1"
+            },
+            {
+              "name": "platformdirs",
+              "version": "4.13.6"
+            },
+            {
+              "name": "pyyaml",
+              "version": "6.0.3"
+            },
+            {
+              "name": "requests",
+              "version": "2.34.2"
+            },
+            {
+              "name": "charset-normalizer",
+              "version": "3.5.2"
+            },
+            {
+              "name": "idna",
+              "version": "3.20"
+            },
+            {
+              "name": "urllib3",
+              "version": "2.8.0"
+            },
+            {
+              "name": "certifi",
+              "version": "2026.10.23"
+            },
+            {
+              "name": "rich",
+              "version": "15.0.0"
+            },
+            {
+              "name": "pygments",
+              "version": "2.21.0"
+            },
+            {
+              "name": "markdown-it-py",
+              "version": "4.2.0"
+            },
+            {
+              "name": "mdurl",
+              "version": "0.1.2"
+            },
+            {
+              "name": "stevedore",
+              "version": "5.9.1"
+            },
+            {
+              "name": "toml",
+              "version": "0.10.2"
+            },
+            {
+              "name": "pyparsing",
+              "version": "3.3.3"
+            }
+          ]
+        },
+        {
+          "requirements": "templates/projects/python-cli/requirements.txt",
+          "packages": [
+            {
+              "name": "click",
+              "version": "8.5.0"
+            },
+            {
+              "name": "rich",
+              "version": "13.9.4"
+            },
+            {
+              "name": "pytest",
+              "version": "9.2.0"
+            },
+            {
+              "name": "pytest-cov",
+              "version": "7.1.0"
+            },
+            {
+              "name": "pluggy",
+              "version": "1.7.0"
+            },
+            {
+              "name": "pygments",
+              "version": "2.21.0"
+            },
+            {
+              "name": "colorama",
+              "version": "0.4.6"
+            },
+            {
+              "name": "coverage",
+              "version": "7.17.0"
+            },
+            {
+              "name": "iniconfig",
+              "version": "2.3.1"
+            },
+            {
+              "name": "markdown-it-py",
+              "version": "4.2.0"
+            },
+            {
+              "name": "mdurl",
+              "version": "0.1.2"
+            }
+          ]
+        },
+        {
+          "requirements": "templates/projects/python-fastapi-ai/requirements-dev.txt",
+          "packages": [
+            {
+              "name": "ruff",
+              "version": "0.14.2"
+            },
+            {
+              "name": "bandit",
+              "version": "1.8.6"
+            },
+            {
+              "name": "pip-audit",
+              "version": "2.9.0"
+            },
+            {
+              "name": "detect-secrets",
+              "version": "1.5.0"
+            },
+            {
+              "name": "cyclonedx-python-lib",
+              "version": "9.1.0"
+            },
+            {
+              "name": "license-expression",
+              "version": "30.4.4"
+            },
+            {
+              "name": "packageurl-python",
+              "version": "0.17.6"
+            },
+            {
+              "name": "py-serializable",
+              "version": "2.1.0"
+            },
+            {
+              "name": "defusedxml",
+              "version": "0.7.1"
+            },
+            {
+              "name": "sortedcontainers",
+              "version": "2.4.0"
+            },
+            {
+              "name": "boolean-py",
+              "version": "5.0"
+            },
+            {
+              "name": "cachecontrol",
+              "version": "0.14.4"
+            },
+            {
+              "name": "msgpack",
+              "version": "1.2.4"
+            },
+            {
+              "name": "colorama",
+              "version": "0.4.6"
+            },
+            {
+              "name": "filelock",
+              "version": "4.2.4"
+            },
+            {
+              "name": "pip-api",
+              "version": "0.0.35"
+            },
+            {
+              "name": "pip-requirements-parser",
+              "version": "32.0.1"
+            },
+            {
+              "name": "platformdirs",
+              "version": "4.13.6"
+            },
+            {
+              "name": "pyyaml",
+              "version": "6.0.3"
+            },
+            {
+              "name": "requests",
+              "version": "2.34.2"
+            },
+            {
+              "name": "charset-normalizer",
+              "version": "3.5.2"
+            },
+            {
+              "name": "idna",
+              "version": "3.20"
+            },
+            {
+              "name": "urllib3",
+              "version": "2.8.0"
+            },
+            {
+              "name": "certifi",
+              "version": "2026.10.23"
+            },
+            {
+              "name": "rich",
+              "version": "15.0.0"
+            },
+            {
+              "name": "pygments",
+              "version": "2.21.0"
+            },
+            {
+              "name": "markdown-it-py",
+              "version": "4.2.0"
+            },
+            {
+              "name": "mdurl",
+              "version": "0.1.2"
+            },
+            {
+              "name": "stevedore",
+              "version": "5.9.1"
+            },
+            {
+              "name": "toml",
+              "version": "0.10.2"
+            },
+            {
+              "name": "pyparsing",
+              "version": "3.3.3"
+            }
+          ]
+        },
+        {
+          "requirements": "templates/projects/python-fastapi-ai/requirements.txt",
+          "packages": [
+            {
+              "name": "fastapi",
+              "version": "0.162.0"
+            },
+            {
+              "name": "uvicorn",
+              "version": "0.54.0"
+            },
+            {
+              "name": "pydantic",
+              "version": "2.14.1"
+            },
+            {
+              "name": "pydantic-core",
+              "version": "2.50.1"
+            },
+            {
+              "name": "pydantic-settings",
+              "version": "2.16.1"
+            },
+            {
+              "name": "httpx",
+              "version": "0.28.1"
+            },
+            {
+              "name": "slowapi",
+              "version": "0.1.10"
+            },
+            {
+              "name": "structlog",
+              "version": "24.4.0"
+            },
+            {
+              "name": "pytest",
+              "version": "9.2.0"
+            },
+            {
+              "name": "pytest-asyncio",
+              "version": "1.4.1"
+            },
+            {
+              "name": "pytest-cov",
+              "version": "7.1.0"
+            },
+            {
+              "name": "httpcore",
+              "version": "1.0.9"
+            },
+            {
+              "name": "pluggy",
+              "version": "1.7.0"
+            },
+            {
+              "name": "annotated-doc",
+              "version": "0.0.5"
+            },
+            {
+              "name": "annotated-types",
+              "version": "0.8.0"
+            },
+            {
+              "name": "click",
+              "version": "8.5.0"
+            },
+            {
+              "name": "colorama",
+              "version": "0.4.6"
+            },
+            {
+              "name": "coverage",
+              "version": "7.17.0"
+            },
+            {
+              "name": "h11",
+              "version": "0.16.0"
+            },
+            {
+              "name": "httptools",
+              "version": "0.9.0"
+            },
+            {
+              "name": "iniconfig",
+              "version": "2.3.1"
+            },
+            {
+              "name": "limits",
+              "version": "5.8.0"
+            },
+            {
+              "name": "deprecated",
+              "version": "3.0.0"
+            },
+            {
+              "name": "wrapt",
+              "version": "2.5.1"
+            },
+            {
+              "name": "opentelemetry-api",
+              "version": "1.45.1"
+            },
+            {
+              "name": "pygments",
+              "version": "2.21.0"
+            },
+            {
+              "name": "python-dotenv",
+              "version": "1.2.4"
+            },
+            {
+              "name": "pyyaml",
+              "version": "6.0.3"
+            },
+            {
+              "name": "starlette",
+              "version": "1.10.0"
+            },
+            {
+              "name": "anyio",
+              "version": "4.15.1"
+            },
+            {
+              "name": "idna",
+              "version": "3.20"
+            },
+            {
+              "name": "typing-extensions",
+              "version": "4.16.0"
+            },
+            {
+              "name": "typing-inspection",
+              "version": "0.4.4"
+            },
+            {
+              "name": "watchfiles",
+              "version": "1.3.0"
+            },
+            {
+              "name": "websockets",
+              "version": "17.3"
+            },
+            {
+              "name": "certifi",
+              "version": "2026.10.23"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "risk_exceptions": [],
+  "inputs_stable": true,
+  "ok": true
+}

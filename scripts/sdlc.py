@@ -185,6 +185,9 @@ def _human_review_diagnostics(review_text: str, path: str) -> list[Diagnostic]:
 def _completion_evidence_diagnostics(
     root: Path, change: Path, requirements: dict, *, check_freshness: bool = True
 ) -> list[Diagnostic]:
+    # Use the same canonical spelling for the root and selected artifact.
+    root = root.resolve()
+    change = change.resolve()
     diagnostics: list[Diagnostic] = []
     change_path = change.relative_to(root).as_posix()
     try:

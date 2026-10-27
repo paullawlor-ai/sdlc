@@ -205,6 +205,31 @@ class LifecycleTests(unittest.TestCase):
             self.assertTrue(completion_gate(root, None, None)[0])
             self.assertEqual(finalization_diagnostics(root), [])
 
+    def test_completion_accepts_equivalent_project_root_spelling(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            self._write_completion_fixture(root)
+            (root / "alternate spelling").mkdir()
+            alias = root / "alternate spelling" / ".."
+            self.assertTrue(completion_gate(alias, None, None)[0])
+            self.assertEqual(finalization_diagnostics(alias), [])
+
+    def test_completion_keeps_must_fix_diagnostic_with_noncanonical_root(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            self._write_completion_fixture(root, "1. Fix authorization bypass")
+            (root / "alternate spelling").mkdir()
+            alias = root / "alternate spelling" / ".."
+            self.assertFalse(completion_gate(alias, None, None)[0])
+            diagnostic = next(
+                item
+                for item in finalization_diagnostics(alias)
+                if item.code == "REVIEW_MUST_FIX_OPEN"
+            )
+            self.assertEqual(
+                diagnostic.path, "sdlc_artifacts/reviews/REV-0001-login.md"
+            )
+
     def test_regulated_review_requires_human_verdict_reviewer_and_date(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
