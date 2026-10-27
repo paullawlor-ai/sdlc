@@ -7,12 +7,13 @@ Usage:
   python sdlc/scripts/status.py
   python sdlc/scripts/status.py --brief    # phase + next action only
 """
-import os
+
 import re
 import sys
 from pathlib import Path
 from typing import Optional
 from _paths import FRAMEWORK_ROOT, artifacts_root
+from _fields import canonical_status, field_in_section, field_value
 
 
 def find_root() -> Path:
@@ -53,14 +54,12 @@ def parse_state(state_path: Path) -> dict:
 
     # The state template uses markdown labels rather than a structured format.
     # Regex extraction is enough for this lightweight, no-dependencies command.
-    phase_match = re.search(r"\*\*Phase\*\*:\s*(.+)", text)
-    phase = phase_match.group(1).strip() if phase_match else "Unknown"
+    phase = field_value(text, "Phase") or "Unknown"
 
     left_off_match = re.search(r"\*\*Left off at\*\*:\s*\n(.+)", text)
     left_off = left_off_match.group(1).strip() if left_off_match else None
 
-    date_match = re.search(r"\*\*Date\*\*:\s*(\d{4}-\d{2}-\d{2})", text)
-    last_date = date_match.group(1) if date_match else None
+    last_date = field_in_section(text, "Last Session Summary", "Date")
 
     # Count table rows in the Pending Approvals section. This is intentionally
     # approximate; it is a status hint, not a compliance parser.
@@ -68,7 +67,8 @@ def parse_state(state_path: Path) -> dict:
     pending_count = 0
     if pending_match:
         rows = [
-            line for line in pending_match.group(1).splitlines()
+            line
+            for line in pending_match.group(1).splitlines()
             if line.strip().startswith("|")
             and not line.strip().startswith("| #")
             and "---" not in line
@@ -86,7 +86,13 @@ def parse_state(state_path: Path) -> dict:
 
 def count_changes(changes_dir: Path) -> dict:
     """Count change proposals by lifecycle status."""
-    counts = {"Proposed": 0, "Approved": 0, "Implemented": 0, "Rejected": 0, "Superseded": 0}
+    counts = {
+        "Proposed": 0,
+        "Approved": 0,
+        "Implemented": 0,
+        "Rejected": 0,
+        "Superseded": 0,
+    }
     if not changes_dir.exists():
         return counts
     for f in changes_dir.glob("*.md"):
@@ -94,21 +100,31 @@ def count_changes(changes_dir: Path) -> dict:
         if f.name.startswith("_") or f.name == "README.md":
             continue
         text = f.read_text(encoding="utf-8", errors="ignore")
-        m = re.search(r"\*\*Status\*\*:\s*(\w+)", text)
-        if m and m.group(1) in counts:
-            counts[m.group(1)] += 1
+        status = canonical_status(text, "change")
+        if status in counts:
+            counts[status] += 1
     return counts
 
 
 def count_adrs(decisions_dir: Path) -> dict:
-    """Count ADR files by folder-based status."""
+    """Count ADRs by lifecycle status, excluding Drafts from approval work."""
     counts = {"accepted": 0, "proposed": 0, "superseded": 0}
     if not decisions_dir.exists():
         return counts
     for subdir in ("accepted", "proposed", "superseded"):
         d = decisions_dir / subdir
         if d.is_dir():
-            counts[subdir] = len([f for f in d.glob("*.md") if not f.name.startswith(".")])
+            expected = {
+                "accepted": "Accepted",
+                "proposed": "Proposed",
+                "superseded": "Superseded",
+            }[subdir]
+            for path in d.glob("*.md"):
+                if path.name.startswith("."):
+                    continue
+                text = path.read_text(encoding="utf-8", errors="ignore")
+                if canonical_status(text, "adr") == expected:
+                    counts[subdir] += 1
     return counts
 
 
@@ -126,6 +142,7 @@ def check_stale_adrs(decisions_dir: Path) -> list:
     to revisit old decisions when technologies, costs, or risks change.
     """
     from datetime import date
+
     stale = []
     accepted = decisions_dir / "accepted"
     if not accepted.is_dir():
@@ -133,12 +150,12 @@ def check_stale_adrs(decisions_dir: Path) -> list:
     today = date.today()
     for f in accepted.glob("*.md"):
         text = f.read_text(encoding="utf-8", errors="ignore")
-        m = re.search(r"\*\*Review-by date\*\*:\s*(\d{4}-\d{2}-\d{2})", text)
-        if m:
+        review_by = field_value(text, "Review-by date")
+        if review_by:
             try:
-                review_date = date.fromisoformat(m.group(1))
+                review_date = date.fromisoformat(review_by)
                 if review_date < today:
-                    stale.append((f.name, m.group(1)))
+                    stale.append((f.name, review_by))
             except ValueError:
                 pass
     return stale
@@ -194,7 +211,13 @@ def main():
         print(f"\n  Changes  ({total_changes} total)")
         for status, count in changes.items():
             if count:
-                indicator = "  [PAUSE] " if status == "Proposed" else "  -> " if status == "Approved" else "    "
+                indicator = (
+                    "  [PAUSE] "
+                    if status == "Proposed"
+                    else "  -> "
+                    if status == "Approved"
+                    else "    "
+                )
                 print(f"  {indicator}{status:<15} {count}")
     else:
         print("\n  Changes        (none)")
@@ -232,12 +255,18 @@ def main():
         # Proposed changes are approval gates. They block only the relevant
         # implementation work, not all other independent project activity.
         n = changes["Proposed"]
-        print(f"\n  [PAUSE]  {n} change proposal{'s' if n > 1 else ''} awaiting approval")
-        print("     Review sdlc_artifacts/changes/ and set Status to Approved to unblock implementation")
+        print(
+            f"\n  [PAUSE]  {n} change proposal{'s' if n > 1 else ''} awaiting approval"
+        )
+        print(
+            "     Review sdlc_artifacts/changes/ and set Status to Approved to unblock implementation"
+        )
     elif changes.get("Approved", 0):
         # Approved changes are ready for developer-agent implementation.
         n = changes["Approved"]
-        print(f"\n  ->  {n} change{'s' if n > 1 else ''} approved and ready to implement")
+        print(
+            f"\n  ->  {n} change{'s' if n > 1 else ''} approved and ready to implement"
+        )
         print("     Start a session: Read sdlc/prompts/continue.md and resume")
     elif stale:
         print("\n  ->  Review stale ADRs listed above before the next iteration")
@@ -254,4 +283,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

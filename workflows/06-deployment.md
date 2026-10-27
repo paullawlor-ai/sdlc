@@ -1,5 +1,11 @@
 # Phase 6: Deployment Workflow
 
+Before release, require passing quality/security CI and a passing Completion
+Gate for the tested snapshot. Follow
+[security evidence freshness](../docs/framework/quality-and-security.md); expired
+or failed scans and unresolved findings block release. Refresh source-bound
+review and any required human sign-off after source changes.
+
 ## Overview
 
 The Deployment phase prepares and executes the deployment of software to production or target environments.

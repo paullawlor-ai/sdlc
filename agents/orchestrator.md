@@ -117,7 +117,8 @@ Implement the approved design, starting with a change proposal.
 ### Testing Phase
 **Invoke**: Tester Agent
 **Goal**: Verify the implementation
-**Complete when**: Tests pass, coverage adequate — then **mandatory** Security Review (Completion Gate)
+**Complete when**: Tests pass and coverage is adequate; then apply the effective
+class/profile Completion Gate requirement
 
 ```
 Act as the Tester agent.
@@ -132,7 +133,7 @@ Create a test plan and verify the implementation meets acceptance criteria.
 ### Security Review Phase
 **Invoke**: Security Reviewer Agent
 **Goal**: Verify security requirements are met; produce REV; pass Completion Gate
-**Complete when**: REV exists with Agent Recommendation Approved (or Approved with notes), no open must-fix; human may set change **Status: Implemented**
+**Complete when**: REV exists with Agent Recommendation Approved (or Approved with notes), no open must-fix, policy-required human review evidence is recorded, and `sdlc check --ready-to-finalize` passes; human may then set change **Status: Implemented**
 
 ```
 Act as the Security Reviewer agent.

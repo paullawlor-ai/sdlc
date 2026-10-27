@@ -11,22 +11,26 @@ Preview without writing files:
     python sdlc/scripts/setup_project.py --dry-run
 
 Safe to re-run:
-  - Never overwrites existing adapter files at the project root
+  - Preserves owner content outside shared managed sections
+  - Upgrades unchanged managed adapters with --upgrade; reports local conflicts
   - Merges Claude Code hooks into .claude/settings.json
 """
+
 from __future__ import annotations
 
 import argparse
 import sys
+from datetime import datetime, timezone
 
 from _paths import FRAMEWORK_ROOT, project_root
 from _setup import (
     ensure_artifacts_root,
+    install_managed_adapters,
     install_claude_hooks,
-    install_codex_agents,
-    install_copilot_instructions,
-    install_cursor_rules,
+    record_install_selection,
+    rollback_managed_adapters,
 )
+from _artifacts import initialize_metadata, project_metadata_mode
 
 
 def _validate_layout() -> None:
@@ -47,7 +51,9 @@ def _validate_layout() -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Install SDLC adapters into the host project.")
+    parser = argparse.ArgumentParser(
+        description="Install SDLC adapters into the host project."
+    )
     parser.add_argument(
         "--dry-run",
         action="store_true",
@@ -63,12 +69,42 @@ def main() -> None:
         action="store_true",
         help="Run verify_setup.py after installation",
     )
+    parser.add_argument(
+        "--assistant",
+        action="append",
+        choices=("codex", "cursor", "copilot", "claude", "all"),
+        help="Install only selected assistant integration(s); repeat as needed",
+    )
+    parser.add_argument(
+        "--upgrade",
+        action="store_true",
+        help="Update unmodified managed adapters and report local conflicts",
+    )
+    parser.add_argument(
+        "--rollback", action="store_true", help="Restore the latest adapter backup"
+    )
+    parser.add_argument("--backup", help="Specific adapter backup directory to restore")
     args = parser.parse_args()
 
     _validate_layout()
     root = project_root()
+    if args.rollback:
+        try:
+            restored = rollback_managed_adapters(root, args.backup)
+        except ValueError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            raise SystemExit(1) from exc
+        print(f"Restored {len(restored)} adapter file(s).")
+        for path in restored:
+            print(f"  Restored: {path}")
+        return
     adapters = FRAMEWORK_ROOT / "adapters"
     dry = args.dry_run
+    requested = set(args.assistant or ["all"])
+    assistants = (
+        {"codex", "cursor", "copilot", "claude"} if "all" in requested else requested
+    )
+    backup_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
 
     print(f"Project root: {root}")
     print(f"Framework:    {FRAMEWORK_ROOT}")
@@ -76,25 +112,36 @@ def main() -> None:
         print("Mode:         dry-run (no files will be changed)")
     print()
 
-    print("Cursor rules (.cursor/rules/):")
-    print("\n".join(install_cursor_rules(root, adapters, dry_run=dry)))
-    print()
+    file_assistants = assistants & {"codex", "cursor", "copilot"}
+    if file_assistants:
+        print("Managed assistant adapters:")
+        print(
+            "\n".join(
+                install_managed_adapters(
+                    root,
+                    adapters,
+                    file_assistants,
+                    upgrade=args.upgrade,
+                    dry_run=dry,
+                    backup_id=backup_id,
+                )
+            )
+        )
+        print()
 
-    print("GitHub Copilot (.github/):")
-    print("\n".join(install_copilot_instructions(root, adapters, dry_run=dry)))
-    print()
+    if "claude" in assistants:
+        print("Claude Code hooks (.claude/settings.json):")
+        print("\n".join(install_claude_hooks(root, dry_run=dry, backup_id=backup_id)))
+        print()
 
-    print("Codex:")
-    print("\n".join(install_codex_agents(root, adapters, dry_run=dry)))
-    print()
-
-    print("Claude Code hooks (.claude/settings.json):")
-    print("\n".join(install_claude_hooks(root, dry_run=dry)))
-    print()
+    record_install_selection(root, assistants, dry_run=dry)
 
     if not args.skip_artifacts:
         print("Artifacts:")
         print("\n".join(ensure_artifacts_root(dry_run=dry)))
+        if not dry and project_metadata_mode(root) == "required":
+            initialize_metadata(root)
+            print("[OK] structured metadata initialized")
         print()
 
     if dry:
@@ -102,8 +149,8 @@ def main() -> None:
     else:
         print("Done.")
         print()
-        print("Existing project files were not overwritten.")
-        print("If adapter files already existed, compare them with sdlc/adapters/ and merge manually if needed.")
+        print("Locally modified adapter files were preserved.")
+        print("Run with --upgrade to update adapters tracked by .sdlc-install.json.")
 
     print()
     print("Next steps:")

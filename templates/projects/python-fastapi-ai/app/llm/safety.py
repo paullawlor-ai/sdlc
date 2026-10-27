@@ -22,7 +22,8 @@ def sanitize_input(user_input: str) -> str:
     """
     Sanitize user input before sending to LLM.
 
-    Implements A0 baseline controls for prompt injection prevention.
+    Performs best-effort pattern screening. This is not prompt-injection
+    prevention and must not be treated as a security boundary.
 
     Args:
         user_input: Raw user input
@@ -33,7 +34,7 @@ def sanitize_input(user_input: str) -> str:
     if not user_input:
         return ""
 
-    # Check for potential injection patterns
+    # Flag and redact a small set of obvious patterns for demonstration only.
     for pattern in INJECTION_PATTERNS:
         if re.search(pattern, user_input, re.IGNORECASE):
             logger.warning(
@@ -50,8 +51,9 @@ def sanitize_input(user_input: str) -> str:
     # Limit length
     max_length = 10000
     if len(user_input) > max_length:
+        original_length = len(user_input)
         user_input = user_input[:max_length]
-        logger.info("input_truncated", original_length=len(user_input))
+        logger.info("input_truncated", original_length=original_length)
 
     return user_input
 
@@ -60,7 +62,8 @@ def validate_output(llm_output: str) -> str:
     """
     Validate and sanitize LLM output before returning to user.
 
-    Implements A0 baseline controls for output safety.
+    Demonstrates output inspection. Production enforcement must be selected for
+    the application's actual output contexts and threat model.
 
     Args:
         llm_output: Raw output from LLM
@@ -112,4 +115,3 @@ def check_pii(text: str) -> list[str]:
         logger.warning("pii_detected", types=detected)
 
     return detected
-

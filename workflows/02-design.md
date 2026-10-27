@@ -52,6 +52,13 @@ ADRs are required for:
 - Security approaches
 - Integration strategies
 
+Complete each generated Draft, then validate and promote it before requesting
+human acceptance:
+
+```bash
+python sdlc/scripts/sdlc.py propose sdlc_artifacts/decisions/proposed/ADR-NNNN-title.md
+```
+
 ### 4. Define Interfaces
 
 Document:
@@ -190,7 +197,7 @@ Waiting for approval...
 # ADR-XXXX - [Title]
 
 ## Status
-Proposed | Accepted | Rejected | Superseded
+- **Current status**: Draft
 
 ## Context
 [Problem being solved, constraints]

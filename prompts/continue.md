@@ -12,6 +12,11 @@ You are continuing work with the **Agentic SDLC Framework**. Assess the current 
 
 Start with the fast-path files. Only fall back to scanning all artefacts if sdlc_artifacts/STATE.md is absent or clearly stale.
 
+Prefer `python sdlc/scripts/sdlc.py context --budget 2000` for a bounded resume
+packet. Load only the current role, active change, and linked constraints needed
+for the task. Detailed requirements/design remain authoritative and may be as
+long as necessary; use `--extended-evidence` only when that detail is needed.
+
 ```
 Fast path (read in order):
 1. sdlc_artifacts/STATE.md                              - current phase, open items, last session summary
@@ -105,9 +110,12 @@ Based on state:
 - Invoke Tester agent
 - Create/update test plan
 
-**If tests passed but no REV for the change:**
-- Invoke Security Reviewer agent (Completion Gate — mandatory before Implemented)
+**If tests passed and the effective class/profile requires a REV:**
+- Invoke Security Reviewer agent (Completion Gate requirement is defined by `policy/sdlc-policy.json`)
 - Create or update `sdlc_artifacts/reviews/REV-*.md` and fill `## Completion Gate` in the change doc
+- Follow `sdlc/docs/framework/quality-and-security.md`: run fresh scans, link the
+  report, and record the reviewed revision/source digest. A required human sign-off
+  includes the protected approved source digest. Never reuse it for changed code.
 
 **If security review needed:**
 - Invoke Security Reviewer agent
@@ -118,6 +126,11 @@ Based on state:
 - Create/update runbook
 
 ### Step 6: Provide Context
+
+Use `sdlc.py handoff` to replace the current handoff and archive its predecessor;
+avoid appending another session narrative to `STATE.md`. Before finalization run
+`sdlc.py check --ready-to-finalize` and `sdlc.py gate completion`. These commands
+report remaining actions without writing any human approval fields.
 
 When resuming, provide:
 - What was last completed

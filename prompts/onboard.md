@@ -71,7 +71,9 @@ This file is essential - all agents read it on every session start.
 
 ### Step 4: Reconstruct Requirements
 
-Create `sdlc_artifacts/requirements/existing.md` describing what the project currently does, written as user stories with acceptance criteria.
+Run `sdlc.py new requirement "existing project behavior"` and complete the
+generated numbered requirement with current user stories and acceptance criteria.
+Keep its approval fields for the human to complete.
 
 - Derive these from the code, README, and any existing docs - not from imagination
 - Only document what is demonstrably implemented
@@ -80,16 +82,28 @@ Create `sdlc_artifacts/requirements/existing.md` describing what the project cur
 
 ### Step 5: Reconstruct Architecture Decisions as ADRs
 
-For each major technical decision already made (language, framework, database, auth, API style, deployment target, etc.), create an ADR in `sdlc_artifacts/decisions/accepted/` using the template at `templates/documents/adr.md`.
+For each major technical decision already made (language, framework, database, auth, API style, deployment target, etc.), create a retroactive ADR in `sdlc_artifacts/decisions/proposed/` using the template at `templates/documents/adr.md`.
 
 Rules for retroactive ADRs:
-- Status: **Accepted** (the decision was already made and implemented)
-- Date: use the project's earliest commit date if known; otherwise today's date
+- Start as **Draft**, complete the reconstructed record, and run `sdlc.py propose
+  PATH` to validate it before presenting it as **Proposed**. The
+  decision may already be implemented, but the assistant must not self-accept
+  the new evidence document.
+- Record an estimated historical decision date in Context if known; leave
+  human-owned approval/status dates blank until the human signs off.
 - Do not second-guess decisions - document what was chosen and the likely rationale
-- Flag decisions that look problematic with a note, but still mark them Accepted
+- Flag decisions that look problematic with a note, but leave them Proposed for
+  human review like every other reconstructed ADR
 - Aim for 3-7 ADRs covering the most consequential decisions; don't over-document obvious defaults
+- Present the retroactive ADRs as one review batch. The human accepts each ADR
+  by editing its Current status and moving it to `decisions/accepted/`.
 
 ### Step 5a: Preserve Historical Changes, Fixes, and Remediations
+
+For upgrades, follow `docs/framework/upgrading.md`: preserve existing approvals,
+preview adapter and metadata changes, and adopt required metadata explicitly.
+Do not manufacture retrospective scan evidence or human sign-off. Report missing
+evidence honestly and prepare a new review of the current snapshot where needed.
 
 Look for existing project history folders and documents, including but not limited to:
 
@@ -161,7 +175,9 @@ Then fill in sdlc_artifacts/STATE.md to reflect current reality:
 - **Blocked**: known blockers
 - **Available**: work that can proceed immediately
 - **Phase Completion Checklist**: copy from `docs/framework/sdlc-phases.md` for the current phase; tick what is already done
-- **Last Session Summary / Left off at**: write a sentence that orients the next agent session
+- **Last Session Summary / Left off at**: run `python sdlc/scripts/sdlc.py handoff`
+  with a concise completed outcome and exact resume point; use `--next-action`
+  to set the next permitted action
 
 ### Step 8a: Check for Missing Security Hygiene Files
 

@@ -7,6 +7,7 @@ Exit codes:
   0  - allow the tool call to proceed
   2  - block the tool call (Claude Code PreToolUse convention)
 """
+
 import json
 import sys
 from pathlib import Path

@@ -39,6 +39,13 @@ create an ADR:
 sdlc_artifacts/decisions/proposed/ADR-0005-password-reset-token-strategy.md
 ```
 
+Complete its context, options, decision, consequences, security notes, and
+rollback plan, then run:
+
+```bash
+python sdlc/scripts/sdlc.py propose sdlc_artifacts/decisions/proposed/ADR-0005-password-reset-token-strategy.md
+```
+
 The ADR is moved to `accepted/` only after human approval.
 
 ## 3. Change Proposal
@@ -57,7 +64,14 @@ The change proposal records:
 - Test approach.
 - Rollback plan.
 
-Implementation waits until the proposal status is `Approved`.
+The Developer validates and promotes the completed Draft:
+
+```bash
+python sdlc/scripts/sdlc.py propose sdlc_artifacts/changes/0001-password-reset-by-email.md
+```
+
+Implementation waits until a human changes the resulting `Proposed` status to
+`Approved`.
 
 ## 4. Implementation
 
@@ -68,7 +82,8 @@ The Developer implements only the approved scope:
 - Email dispatch integration.
 - Tests for happy path, unknown email, expired token, reused token, and rate limits.
 
-The change proposal is updated with actual hours and status `Implemented`.
+The change proposal is updated with actual hours. The human sets `Implemented`
+after testing, security review, and the Completion Gate pass.
 
 ## 5. Testing
 
@@ -101,7 +116,17 @@ Checks include:
 - V0: reset events audited if audit baseline applies.
 - C0: email provider secrets managed securely if cloud baseline applies.
 
-Must-fix findings block deployment until remediated or risk-accepted.
+Run the automated checks described in `quality-and-security.md`, link their JSON
+report, and record the reviewed source digest and revision. Must-fix findings
+block completion and deployment until remediated; policy permits no risk waivers.
+
+Run `sdlc.py metadata sync --apply` after human approval/sign-off edits so the
+required sidecars match Markdown. For regulated or high-risk work, the human
+checks the Summary Verdict and fills Reviewer, ISO Date, and Approved source
+digest. `sdlc.py check --ready-to-finalize` and `sdlc.py gate completion` must
+pass before the human marks Implemented. Synchronize metadata after that final
+status edit too. The executable journey is in `tests/test_end_to_end.py`; its
+simulated human approvals and scan records are test data, not project evidence.
 
 ## 7. Deployment
 

@@ -59,4 +59,3 @@ async def readiness_check():
     """Readiness check endpoint."""
     # Add checks for dependencies (database, LLM API, etc.)
     return {"status": "ready", "service": settings.APP_NAME}
-

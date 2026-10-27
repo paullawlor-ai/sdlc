@@ -39,6 +39,10 @@ Copy the **`sdlc/`** folder into your project root, then run setup from the proj
    python sdlc/scripts/verify_setup.py
    ```
    This installs Cursor rules, Copilot instructions, Codex `AGENTS.md`, and Claude Code hooks without overwriting anything you already have. It also creates `sdlc_artifacts/STATE.md` when missing. Use `--dry-run` to preview changes without writing files.
+
+   To install only the tools in use, pass `--assistant` one or more times. Setup
+   also creates `sdlc_artifacts/config.json`, where `standard` can be changed to
+   the `lite` or `regulated` policy profile.
 4. Open the project and run:
    ```
    Read sdlc/prompts/onboard.md and begin
@@ -140,7 +144,56 @@ The framework pauses at key decision points:
 - **Completion Gate**: After tests pass, security review (REV) must pass before Status becomes `Implemented`
 - **Security Findings**: Address must-fix items
 
+Change proposals and ADRs are created as Drafts so an assistant can safely fill
+them in without implying they are ready for review. Once the Draft is complete,
+promote it from the project root:
+
+```bash
+python sdlc/scripts/sdlc.py propose sdlc_artifacts/changes/0001-example.md
+python sdlc/scripts/sdlc.py propose sdlc_artifacts/decisions/proposed/ADR-0001-example.md
+```
+
+The command checks required sections and substantive fields, then atomically
+changes `Draft` to `Proposed`. If validation fails, the file remains Draft and
+the reported diagnostic codes identify the missing content. Drafts are not
+shown as pending human approvals and cannot satisfy implementation gates.
+
+Before the human changes an approved change to `Implemented`, run
+`python sdlc/scripts/sdlc.py check --ready-to-finalize`. Standard work requires
+the agent recommendation and clean review evidence. Regulated and high-risk
+work additionally requires one approving human verdict, reviewer name, and ISO
+date in the REV document. The command reports missing actions but never edits
+human-owned fields.
+
+### Structured Metadata
+
+For a 0.2.0 project, follow the complete sequence in
+[upgrading.md](upgrading.md) before strict validation. Release contributors should
+also use the [release checklist](releasing.md).
+
+New projects use required structured metadata from setup. Existing projects stay
+in compatibility mode after replacing or upgrading the framework. Preview and
+adopt required mode explicitly:
+
+```bash
+python sdlc/scripts/sdlc.py metadata sync
+python sdlc/scripts/sdlc.py metadata sync --apply
+python sdlc/scripts/sdlc.py check
+```
+
+Apply writes derived sidecars and `index.json`, changes only `metadata_mode` in
+project configuration, and creates a rollback snapshot. It does not rewrite
+Markdown or approval fields. Run
+`python sdlc/scripts/sdlc.py migrate --rollback` to restore the previous
+metadata, index, and configuration snapshot.
+
 **Human-only approval fields.** You must edit approval status yourself in your editor — the AI cannot set `Status: Approved`, `Status: Implemented`, `Current status: Accepted`, or sign-off fields, even if you tell it to verbally. Claude Code blocks these writes via `approval_field_guard.py`; other tools rely on instruction rules.
+
+Before completion, follow [quality and security evidence](quality-and-security.md).
+Required reviews link successful scan JSON and its reviewed source digest;
+regulated/high-risk human sign-off also records the approved source digest.
+After human edits, synchronize metadata, then run `sdlc.py check
+--ready-to-finalize` and `sdlc.py gate completion` before marking Implemented.
 
 When **more than one** change proposal is Approved, set exactly one in `sdlc_artifacts/STATE.md` under `## Active Change` → **Change document** before implementing.
 
@@ -177,6 +230,21 @@ The orchestrator will:
 6. **Keep the backlog updated**: Track what's done and what's next
 
 ## Troubleshooting
+
+### Check the local execution environment
+
+Run `python sdlc/scripts/sdlc.py doctor` from the project root. It reports the
+interpreter and virtual environment actually in use, write access, the operating
+system temporary directory, and Git evidence readiness. Use the printed quoted
+Python command when an assistant resolves a different interpreter than your
+shell.
+
+Let pytest create its normal unique temporary directories through `tmp_path` or
+`tmp_path_factory`. Do not configure a fixed project-local `--basetemp` for
+interactive or concurrent assistant runs. When a custom base is unavoidable,
+generate a unique path per run and clean it up after the run. Environment or
+temporary-directory failures should be reported separately from product test
+failures.
 
 ### Agent seems confused about project state
 Run: `Read sdlc/prompts/continue.md and give me a status report`

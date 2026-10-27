@@ -2,9 +2,16 @@
 
 **Structured software delivery for AI-assisted development.**
 
+Prepared source version: **0.3.0** (Unreleased). See the
+[migration guide](docs/framework/upgrading.md) and
+[release checklist](docs/framework/releasing.md).
+
 AI coding assistants are fast — but without guardrails they drift, skip review, and lose context between sessions. This framework gives you a repeatable process: specialised agent roles, written artifacts, human approval gates, and tool adapters so Cursor, Copilot, Claude Code, and Codex all follow the same rules.
 
 Copy the `sdlc/` folder into any project. Run one setup script. Start with a prompt.
+
+Framework contributors: see [quality and security checks](docs/framework/quality-and-security.md)
+for matching local/CI commands and revision-bound review evidence.
 
 ---
 
@@ -30,11 +37,16 @@ Requirements  →  Design (ADRs)  →  Change proposal  →  Human approval
 
 1. **You copy `sdlc/`** into your project — it holds agents, prompts, workflows, templates, and scripts. It is framework infrastructure, not product code.
 
-2. **Setup installs adapters** — Cursor rules, Copilot instructions, Codex `AGENTS.md`, and Claude Code hooks land at your project root. Your existing config is never overwritten.
+2. **Setup installs selected adapters** — Cursor rules, Copilot instructions,
+Codex `AGENTS.md`, and Claude Code hooks can be installed individually. Managed
+files are versioned; local modifications are preserved during upgrades.
 
 3. **Work produces `sdlc_artifacts/`** — requirements, ADRs, change proposals, reviews, and `STATE.md` (current phase and open items). Agents read these every session.
 
-4. **Gates enforce discipline** — nothing ships to product code without an approved change proposal. Approval fields (`Status: Approved`, `Implemented`, etc.) are human-only. Claude Code hooks enforce this at the tool level; other assistants follow the same rules via instructions.
+4. **Gates enforce discipline proportionately** — work is classified as trivial,
+standard, or high-risk under the project's `lite`, `standard`, or `regulated`
+profile. Approval fields (`Status: Approved`, `Implemented`, etc.) remain
+human-only. See [Policy profiles](docs/framework/policy-profiles.md).
 
 5. **You drive with prompts** — tell your assistant `Read sdlc/prompts/continue.md and resume` and it picks up where you left off.
 
@@ -53,7 +65,16 @@ python sdlc/scripts/setup_project.py
 python sdlc/scripts/verify_setup.py
 ```
 
-Setup is safe to re-run. It skips files you already have — compare with `sdlc/adapters/` when upgrading the framework.
+Install only the assistants used by a project when preferred:
+
+```bash
+python sdlc/scripts/setup_project.py --assistant codex
+python sdlc/scripts/setup_project.py --assistant cursor --assistant claude
+```
+
+Setup is safe to re-run. It preserves owner content in shared instruction files
+and reports conflicting local edits. Use the managed
+[upgrade process](docs/framework/upgrading.md) to update installed adapters.
 
 ### 2. Start your first session
 
@@ -114,7 +135,7 @@ Three gates keep AI-assisted work under control:
 |------|------|----------------|
 | **Approval** | Before implementation | Change proposal reviewed; **you** set `Status: Approved` in the file |
 | **Implementation** | Before every product-code edit | Approved change exists; blocking ADRs accepted; Active Change set when multiple approved |
-| **Completion** | Before marking done | Tests pass; security review (REV) written; **you** set `Status: Implemented` |
+| **Completion** | Before marking done when required by profile/class | Tests pass; required REV is written; **you** set `Status: Implemented` |
 
 **Human-only fields** — the model must never write approval statuses, sign-offs, or REV verdict checkboxes. In Claude Code, `approval_field_guard.py` blocks these at the tool level. In Cursor and Copilot, the rules instruct the model to stop and ask you to edit the file yourself.
 
@@ -184,13 +205,48 @@ python sdlc/scripts/setup_project.py              # install adapters + hooks
 python sdlc/scripts/setup_project.py --dry-run    # preview changes
 python sdlc/scripts/verify_setup.py               # verify installation
 python sdlc/scripts/status.py                     # summarise project state
+python sdlc/scripts/sdlc.py next                  # next permitted action
+python sdlc/scripts/sdlc.py context               # compact assistant context
+python sdlc/scripts/sdlc.py context --extended-evidence  # bounded optional detail
+python sdlc/scripts/sdlc.py handoff --completed "Outcome" --left-off "Resume point"
+python sdlc/scripts/sdlc.py doctor                # interpreter, temp, and Git readiness
+python sdlc/scripts/sdlc.py check                 # validate policy and artifacts
+python sdlc/scripts/sdlc.py check --ready-to-finalize  # explain final human actions
+python sdlc/scripts/sdlc.py propose PATH          # validate Draft and mark Proposed
+python sdlc/scripts/sdlc.py metadata sync         # preview metadata adoption/sync
+python sdlc/scripts/sdlc.py metadata sync --apply # sync and adopt required mode
+python sdlc/scripts/sdlc.py migrate --rollback    # restore metadata snapshot
 
 python sdlc/scripts/new_requirement.py "title"
 python sdlc/scripts/new_change.py "description"
 python sdlc/scripts/new_adr.py "decision title"
+python sdlc/scripts/new_review.py "change title"
 python sdlc/scripts/new_state.py
 python sdlc/scripts/init_project.py python-fastapi-ai   # optional template
 ```
+
+The unified equivalents are `sdlc.py new`, `sdlc.py setup`, `sdlc.py verify`,
+and `sdlc.py upgrade`. Existing script names remain compatibility entry points.
+
+New changes and ADRs begin as agent-writable Drafts. After completing their
+required scope, dependencies, acceptance/testing evidence, or decision analysis,
+run `sdlc.py propose PATH`. Only a complete artifact is promoted to `Proposed`;
+the subsequent approval or acceptance remains human-owned.
+
+Use `sdlc.py handoff` at a session boundary. It keeps one compact current
+summary in `STATE.md` and archives the previous summary in
+`sdlc_artifacts/history/handoffs.md`, which normal context generation does not
+load. Repeat `--completed` for multiple outcomes and add `--next-action` when
+the next permitted action changed. `sdlc check --json` reports approximate token
+measurements and policy targets for each governed artifact.
+
+`sdlc doctor` prints the exact Python executable in use, whether a virtual
+environment is active, project/temp write readiness, Git baseline and evidence
+status, and fixed pytest `--basetemp` settings that may collide across runs.
+Projects that intentionally do not use Git can set `repository_mode` to
+`non-git` in `sdlc_artifacts/config.json`. The regulated profile otherwise
+requires committed SDLC evidence before finalisation; other profiles report Git
+durability as advisory diagnostics.
 
 ---
 
@@ -209,6 +265,10 @@ python sdlc/scripts/init_project.py python-fastapi-ai   # optional template
 Supporting roles: **Docs Writer**, **Web Designer/Engineer**. Full phase guide: [SDLC phases](docs/framework/sdlc-phases.md).
 
 Large changes are split into **implementation phases** sized for one AI session (~2–3 files, ~200 lines). See [Change proposal template](templates/documents/change-proposal.md).
+
+Runtime adapters are generated from `policy/sdlc-policy.json` and kept below a
+configured token budget. Detailed workflows, roles, and catalogs are loaded only
+when the current action needs them.
 
 ---
 
@@ -238,7 +298,11 @@ Reference: [Security baselines](docs/security/security-baselines.md)
 | Starter project templates | [templates/projects/](templates/projects/) |
 | Filled-in examples | [examples/](examples/) |
 | FAQ | [faq.md](docs/framework/faq.md) |
-| External filesystem enforcement | [External enforcement agent](docs/framework/external-enforcement-agent.md) |
+| External enforcement integration (design) | [External enforcement design note](docs/framework/external-enforcement-agent.md) |
+| Policy profiles and change classes | [Policy profiles](docs/framework/policy-profiles.md) |
+| Structured artifact index | [Structured artifacts](docs/framework/structured-artifacts.md) |
+| Framework upgrades | [Upgrading](docs/framework/upgrading.md) |
+| Release process | [Release checklist](docs/framework/releasing.md) |
 
 ---
 

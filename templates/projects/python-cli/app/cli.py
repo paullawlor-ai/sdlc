@@ -20,4 +20,3 @@ cli.add_command(example)
 
 if __name__ == "__main__":
     cli()
-

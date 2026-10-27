@@ -22,4 +22,3 @@ def validate_response(response: str) -> str:
     # (Customize based on your use case)
 
     return response
-

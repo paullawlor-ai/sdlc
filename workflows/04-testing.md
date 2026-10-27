@@ -1,5 +1,10 @@
 # Phase 4: Testing Workflow
 
+Run lint and formatting checks with the functional suite. Use the
+[local/CI quality commands](../docs/framework/quality-and-security.md), preserve
+test results for the reviewed source snapshot, and rerun affected tests after
+source changes. A scanner or environment failure is not a passing security test.
+
 ## Overview
 
 The Testing phase verifies that implementations meet requirements, work correctly, and handle edge cases appropriately.

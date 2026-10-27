@@ -1,6 +1,7 @@
 # REQ-XXXX - <requirement title>
 
 ## Summary
+<!-- Keep this as the ordinary-context layer: outcome, users, and essential constraint only. -->
 Brief description of the requirement (1-2 sentences).
 
 ## Type
@@ -19,6 +20,7 @@ Brief description of the requirement (1-2 sentences).
 Who requested or will benefit from this requirement?
 
 ## Description
+<!-- Preserve necessary nuance. This section is authoritative detail and has no token limit. -->
 Detailed description of what is needed.
 
 ## User Stories
@@ -66,7 +68,13 @@ How will we know this requirement is satisfied?
 What is explicitly NOT included in this requirement?
 
 ## Notes
-Additional context, links, or references.
+Preserve unresolved thinking and nuance that may affect the outcome. Do not repeat
+scope, decisions, or test results already recorded in linked artifacts.
+
+## Evidence References
+<!-- Link detailed research, raw output, source material, or audit evidence; do not paste it here. -->
+- **Supporting evidence**:
+- **Related ADRs / changes / tests**:
 
 ## Approval
 <!-- HUMAN-ONLY SECTION. The model must not edit Status, Approved by, or Date. -->

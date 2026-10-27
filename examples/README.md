@@ -4,6 +4,14 @@ Filled-in reference documents showing the expected level of detail for each docu
 
 Use these to calibrate your own documents, not as copy-paste templates.
 
+The Bloom records are historical fictional examples, not executable 0.3.0
+completion evidence. Their statuses and names do not confer approval on a real
+project. For the current command sequence, use
+[`docs/framework/lifecycle-example.md`](../docs/framework/lifecycle-example.md)
+and the executable `tests/test_end_to_end.py` fixture. A real completion needs
+the current profile's metadata, scan report, source digest, and human sign-off
+where required; do not copy a fictional approval or invent a passing scan.
+
 ---
 
 ## Documents

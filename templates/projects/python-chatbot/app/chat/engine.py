@@ -22,6 +22,7 @@ class ChatEngine:
 
         if settings.RAG_ENABLED:
             from app.rag.retriever import Retriever
+
             self.rag = Retriever(settings.RAG_DOCUMENTS_PATH)
 
     async def chat(self, user_input: str) -> str:
@@ -92,4 +93,3 @@ class ChatEngine:
         """Clear conversation history."""
         self.memory.clear()
         logger.info("history_cleared")
-

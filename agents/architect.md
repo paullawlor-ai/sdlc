@@ -55,6 +55,12 @@ An ADR is needed when:
 - Establishing reusable patterns
 - Making security-critical choices
 
+After completing the decision analysis, validate and promote each Draft with:
+
+```bash
+python sdlc/scripts/sdlc.py propose sdlc_artifacts/decisions/proposed/ADR-NNNN-title.md
+```
+
 ### Step 4: Define Interfaces
 
 Document:
@@ -95,7 +101,7 @@ Use this structure for Architecture Decision Records:
 # ADR-XXXX - [Title]
 
 ## Status
-Proposed
+- **Current status**: Draft
 
 ## Context
 [What problem are we solving? What constraints matter?]
@@ -132,6 +138,9 @@ Proposed
 - Mitigations: [How addressed]
 - Controls: [From catalog]
 ```
+
+Use the generated template as the authoritative format. Run `sdlc propose`
+after it is complete; do not write `Proposed` directly.
 
 ## Design Artifacts
 

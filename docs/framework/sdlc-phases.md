@@ -195,7 +195,7 @@ Verify the software meets security requirements and follows best practices.
 - [ ] No must-fix findings unaddressed
 - [ ] Security baselines verified
 - [ ] Rollback plan credible
-- [ ] Human approval on review
+- [ ] Policy-required human review evidence recorded for regulated/high-risk work
 
 ## Phase 6: Deployment
 

@@ -16,7 +16,7 @@ Common questions about when and how to use the framework.
 - Adding a new feature or API endpoint
 - Refactoring a module or component
 - Updating a dependency with breaking changes
-- Any change that would take more than an hour to implement
+- Work classified as standard or high-risk under the project policy
 
 **Rule of thumb**: if you are deciding *what kind of thing to build*, write an ADR. If you are deciding *what to build next*, write a change proposal. A single piece of work often produces both: an ADR for the key decision, and a change proposal for the implementation.
 
@@ -26,43 +26,47 @@ If a change depends on an ADR, list that ADR in the change proposal's Dependenci
 
 ## What counts as a "significant" change requiring a proposal?
 
-Create a change proposal for any change that is:
-- Security-relevant (auth, DB access, middleware, secrets, config defaults, dependencies)
-- Modifying a public API or contract
-- Touching multiple components
-- Expected to take more than ~1 hour
-- Introducing or removing a dependency
-- Changing deployment or infrastructure configuration
+Use the change classes and selected profile in
+[`policy-profiles.md`](policy-profiles.md), backed by `policy/sdlc-policy.json`.
+Classification depends on impact, not estimated duration or line count.
 
-**Skip the proposal for**: typos, comment fixes, test-only changes, minor log-level tweaks, README updates, and other changes that do not affect product behavior, security posture, deployment, shared contracts, or architecture.
+- Standard behavior, configuration, and dependency changes require a proposal.
+- High-risk work also requires accepted blocking ADRs.
+- Trivial documentation, comment, formatting, or isolated low-risk corrections
+  do not require a proposal by default. A test or logging change is not trivial
+  if it changes security posture, shared contracts, or production behavior.
 
-When in doubt, write a short proposal. A one-paragraph proposal is better than none.
+When uncertain, use the more restrictive class and explain why.
 
 ---
 
 ## Can I skip phases?
 
-Yes, with documented justification. The framework includes skip conditions in `docs/framework/sdlc-phases.md`. General guidance:
+Use the selected profile/class to determine required evidence and approvals.
+Design work can be brief when there is no new architectural decision, and
+trivial documentation changes do not need a full delivery cycle. A skipped
+activity does not waive a gate that policy requires.
 
-| Situation | What to skip | What to keep |
-|-----------|-------------|-------------|
-| Small bug fix | Design phase, formal change proposal | Self-review checklist, unit test |
-| Hotfix to production | Design, formal testing | Security check, rollback plan, brief proposal |
-| Exploratory spike | All formal process | Document outcome as ADR if a decision was reached |
-| Config-only change | Design, testing | Change proposal (1 paragraph), approval |
-| Documentation update | Everything | Nothing required |
-
-Always note skips in sdlc_artifacts/STATE.md with a brief justification so future sessions understand why artefacts are missing.
+Record applicable skips and their justification in `sdlc_artifacts/STATE.md`.
+Security, dependency, infrastructure, and hotfix work still use their actual
+risk class rather than automatically taking a lighter path.
 
 ---
 
 ## How do I handle a hotfix?
 
-1. Create a minimal change proposal - Summary and Rollback Plan are the most important sections; the rest can be brief
-2. Get inline approval: write `Approved - [initials] [date]` in the document and proceed
-3. Implement and deploy
-4. Run a mental security checklist (no formal review needed for trivial fixes)
-5. Update sdlc_artifacts/STATE.md: note what was fixed and that the normal process was abbreviated
+1. Classify the fix under the existing policy. Urgency does not waive approval,
+   required review, or accepted blocking ADRs.
+2. Create a Draft with `sdlc.py new change`, complete the required scope,
+   dependencies, acceptance criteria, testing, and rollback information, then
+   run `sdlc.py propose PATH`.
+3. Have a human set the canonical `Approval / Status` to exactly `Approved` and
+   fill the separate approval identity/date fields. Do not combine initials or
+   dates into the status value, and do not have an agent edit human-only fields.
+4. Run the Implementation Gate, implement, and collect the required test and
+   fresh scan/review evidence. Use `sdlc.py check --ready-to-finalize` before the
+   human completion transition, and follow deployment/rollback procedures.
+5. Record the outcome and resume point in `sdlc_artifacts/STATE.md`.
 
 ---
 
@@ -161,9 +165,14 @@ Include them in a change proposal like any other change. In the Testing section,
 
 ## How do I get framework updates into a project that already has `sdlc/` copied in?
 
-The simplest approach: copy the updated framework files over the existing `sdlc/` folder and review the diff. Only framework files (`.md`, `.py`, templates) should change - your project artefacts (`sdlc_artifacts/changes/`, `sdlc_artifacts/`, `sdlc_artifacts/reviews/`, `sdlc_artifacts/STATE.md`) are unaffected because they do not exist in the framework repo.
+Follow [`upgrading.md`](upgrading.md). Back up the host project, replace only
+the framework runtime, preview and apply managed adapter upgrades, and verify
+the installation. Preserve the host project's `sdlc_artifacts/`, owner
+instructions, install manifest, and rollback snapshots.
 
-If you have customised any framework files locally, reconcile those changes after the copy.
+Do not copy the framework repository's development environments or release scan
+records into a host project. Metadata adoption is a separate explicit operation;
+it must preserve Markdown and human approval history.
 
 ---
 

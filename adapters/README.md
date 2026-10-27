@@ -12,7 +12,10 @@ From your project root (after copying `sdlc/` into the project):
 python sdlc/scripts/setup_project.py
 ```
 
-The script installs adapters **additively** — it never overwrites existing Cursor rules, Copilot instructions, or `AGENTS.md` at the project root. Claude Code hooks are merged into `.claude/settings.json`.
+The script installs adapters selectively and records managed copies in
+`.sdlc-install.json`. Upgrades replace only files whose installed hash is still
+unchanged; local modifications are preserved and reported. Claude Code hooks are
+merged into `.claude/settings.json`.
 
 ## Codex
 
@@ -59,7 +62,8 @@ Four hooks are installed:
 
 - **`implementation_gate.py`** — `PreToolUse` on Write/Edit/MultiEdit. Blocks product code edits until an approved change proposal exists.
 - **`approval_field_guard.py`** — `PreToolUse` on Write/Edit/MultiEdit. Blocks the model from setting human-only approval fields in `sdlc_artifacts/`.
-- **`bash_gate.py`** — `PreToolUse` on Bash. Blocks common Bash write patterns to product code without an approved change.
+- **`bash_gate.py`** — `PreToolUse` on Bash. Detects common Bash write patterns
+  and applies the gate. It is defence in depth, not a complete shell sandbox.
 - **`session_end_reminder.py`** — `Stop`. Reminds Claude to update `STATE.md`.
 
 See `claude/README.md`. The `settings.json` file in `claude/` is a reference snapshot only — `setup_project.py` generates hook commands with the correct paths for your install layout.
@@ -67,5 +71,8 @@ See `claude/README.md`. The `settings.json` file in `claude/` is a reference sna
 Keep assistant-specific files small. Put durable framework behavior in `agents/`, `prompts/`, and `workflows/`, then have adapters point assistants to those files.
 
 **Instruction vs hook enforcement:**
-- **Claude Code hooks** hard-enforce: approved change proposal, Active Change when multiple approved, blocking ADRs accepted, and human-only approval fields.
+- **Claude Code direct-edit hooks** enforce the effective policy for Write/Edit
+  tools, Active Change when multiple proposals are approved, blocking ADRs, and
+  human-only approval fields. Shell detection is best-effort and must not be
+  treated as a security boundary.
 - **Cursor, Copilot, Codex** instruction files describe the full gate checklist (STATE.md, AC, test expectations, Completion Gate) — the model must follow them; there is no tool-level block.

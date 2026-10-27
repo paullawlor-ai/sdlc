@@ -79,4 +79,3 @@ async def get_completion(
                 status_code=e.response.status_code,
             )
             raise
-

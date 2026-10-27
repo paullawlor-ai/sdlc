@@ -186,7 +186,7 @@ def test_user_can_login_with_valid_credentials():
     # When
     response = client.post("/login", json={
         "email": "test@example.com",
-        "password": "validpassword"
+        "password": fixture_password
     })
     
     # Then
@@ -222,7 +222,9 @@ def test_user_can_login_with_valid_credentials():
 
 ## Handoff to Security Review
 
-When tests pass, **invoke Security Review immediately** (do not mark the change Implemented). The Security Reviewer must create or update a REV and pass Completion Gate before the human sets **Status: Implemented**.
+When tests pass, check the effective change class and project profile. If they
+require a completion review, invoke Security Review before the human sets
+**Status: Implemented**.
 
 ```markdown
 ## Handoff: Testing -> Security Review
@@ -241,10 +243,12 @@ When tests pass, **invoke Security Review immediately** (do not mark the change 
 ### Areas for Security Focus
 - [Specific areas needing security review]
 
-### Completion Gate (required next)
+### Completion Gate (when required by policy)
 - [ ] REV created/updated in sdlc_artifacts/reviews/
 - [ ] Agent Recommendation recorded
 - [ ] ## Completion Gate filled in change doc
+- [ ] Policy-required human REV evidence recorded for regulated/high-risk work
+- [ ] `sdlc check --ready-to-finalize` passes
 - [ ] Human notified to set Status: Implemented only after PASS
 ```
 

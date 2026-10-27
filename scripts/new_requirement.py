@@ -4,10 +4,13 @@
 Usage:
   python sdlc/scripts/new_requirement.py "user authentication"
 """
+
 import os
 import re
 import sys
+from pathlib import Path
 from _paths import FRAMEWORK_ROOT, artifacts_root
+from _artifacts import metadata_root, project_metadata_mode, sync_artifact_metadata
 
 # Requirements belong to the host project and are generated under
 # sdlc_artifacts. The reusable template stays in the framework folder.
@@ -47,7 +50,7 @@ def main():
     title = " ".join(sys.argv[1:])
     n = next_num()
     slug = slugify(title)
-    out = os.path.join(REQ_DIR, f"REQ-{n:04d}-{slug}.md")
+    out = REQ_DIR / f"REQ-{n:04d}-{slug}.md"
 
     # First-time projects may not have any artifact directories yet.
     os.makedirs(REQ_DIR, exist_ok=True)
@@ -60,8 +63,12 @@ def main():
     body = body.replace("XXXX", f"{n:04d}")
     body = body.replace("<requirement title>", title)
 
-    with open(out, "w", encoding="utf-8") as f:
-        f.write(body)
+    temporary = Path(str(out) + ".sdlc-tmp")
+    temporary.write_text(body, encoding="utf-8")
+    temporary.replace(out)
+    root = artifacts_root().parent
+    if project_metadata_mode(root) == "required" or metadata_root(root).is_dir():
+        sync_artifact_metadata(root, out)
 
     print(f"Created: {out}")
     print(f"Requirement number: REQ-{n:04d}")

@@ -1,5 +1,10 @@
 # Phase 3: Implementation Workflow
 
+Run the project's Ruff lint and formatting checks before handing off for testing.
+See [quality commands](../docs/framework/quality-and-security.md). Preserve test
+and scan evidence for the implemented revision; source changes require refreshed
+security evidence and any required human review.
+
 ## Overview
 
 The Implementation phase builds the software according to approved designs, following security guidelines and quality standards.
@@ -46,6 +51,14 @@ Fill out:
 - Acceptance criteria
 - Testing plan
 - Rollback procedure
+
+When the Draft is complete, validate and promote it:
+
+```bash
+python sdlc/scripts/sdlc.py propose sdlc_artifacts/changes/NNNN-description.md
+```
+
+Only a successful promotion enters the human approval queue.
 
 ### 3. Wait for Approval
 
@@ -151,15 +164,19 @@ Do **not** set Approval **Status** to `Implemented` here. That happens only afte
 
 ### 8. Completion Gate (after Testing)
 
-**Mandatory** before the change is treated as complete or Approval **Status** becomes `Implemented`. See `.cursor/rules/implementation-gate.mdc` (Completion Gate section) and `workflows/05-security-review.md`.
+Required before the change is treated as complete when the effective change
+class and project profile require a completion review. Check with
+`python sdlc/scripts/sdlc.py gate completion`; see
+`workflows/05-security-review.md` when a REV is required.
 
 | Step | Requirement |
 |------|-------------|
 | 1 | All tests for this change pass (Tester or Developer runs them) |
 | 2 | Create or update `sdlc_artifacts/reviews/REV-NNNN-*.md` referencing this change |
 | 3 | **Agent Recommendation** in REV is `Approved` or `Approved with notes`; no open Must-Fix |
-| 4 | Fill `## Completion Gate` in the change document |
-| 5 | Human sets Approval **Status** to `Implemented` |
+| 4 | For regulated/high-risk work, human records one approving verdict, reviewer, and ISO date in REV |
+| 5 | Fill `## Completion Gate` and run `sdlc check --ready-to-finalize` |
+| 6 | Human sets Approval **Status** to `Implemented` |
 
 If Completion Gate fails, return to Developer for fixes or complete the security review — do not mark Implemented.
 

@@ -8,6 +8,7 @@ Exit codes:
   0  - allow
   2  - block
 """
+
 import json
 import re
 import sys
@@ -72,11 +73,13 @@ def main() -> None:
     allowed, message = evaluate_implementation_gate(project_root)
     if not allowed:
         files_listed = ", ".join(product_targets[:3])
-        print(message.replace(
-            "[SDLC] IMPLEMENTATION GATE - BLOCKED",
-            f"[SDLC] IMPLEMENTATION GATE - BLOCKED (Bash)\n\nDetected write to product code: {files_listed}",
-            1,
-        ))
+        print(
+            message.replace(
+                "[SDLC] IMPLEMENTATION GATE - BLOCKED",
+                f"[SDLC] IMPLEMENTATION GATE - BLOCKED (Bash)\n\nDetected write to product code: {files_listed}",
+                1,
+            )
+        )
         sys.exit(2)
 
     sys.exit(0)

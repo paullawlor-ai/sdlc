@@ -63,4 +63,3 @@ class Retriever:
         """
         # Placeholder - implement actual indexing
         logger.info("document_added", content_length=len(content))
-

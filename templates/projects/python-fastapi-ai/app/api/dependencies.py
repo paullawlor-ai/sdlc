@@ -15,4 +15,3 @@ def get_request_id(request: Request) -> str:
     if not request_id:
         request_id = str(uuid.uuid4())
     return request_id
-

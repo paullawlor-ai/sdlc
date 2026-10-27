@@ -7,6 +7,7 @@ so Claude sees it as a follow-up task and updates STATE.md before finishing.
 Checks stop_hook_active to prevent infinite loops (Claude updates STATE.md,
 tries to stop again, hook fires again, repeat).
 """
+
 import json
 import sys
 from pathlib import Path

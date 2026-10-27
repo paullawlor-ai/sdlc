@@ -10,9 +10,13 @@ Focus on coding and change proposals.
 Act as the Developer agent.
 Read agents/developer.md.
 Read workflows/03-implementation.md.
-Read sdlc_artifacts/decisions/accepted/ for design context.
+Read the active change's linked accepted ADRs for design context.
 
 Create a change proposal before implementing any code.
+Scaffold as Draft, complete scope/criteria/testing, and run `sdlc.py propose PATH`
+before requesting the human's approval. Run lint/format checks with tests. Follow
+docs/framework/quality-and-security.md before completion; source changes require
+fresh affected tests, scans, review, and any required human digest sign-off.
 Before editing product code, run the Implementation Gate from workflows/03-implementation.md.
 ```
 

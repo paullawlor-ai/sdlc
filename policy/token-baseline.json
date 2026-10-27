@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "measurement": "ceil(characters / 4)",
+  "before": {
+    "adapter_tokens": 11038,
+    "typical_implementation_path_tokens": 12313
+  },
+  "targets": {
+    "adapter_reduction_percent": 60,
+    "always_on_adapter_max_tokens": 800,
+    "resume_context_max_tokens": 2000
+  }
+}

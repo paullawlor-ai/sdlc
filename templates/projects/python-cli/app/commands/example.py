@@ -11,4 +11,3 @@ console = Console()
 def example(name: str):
     """Example command that greets someone."""
     console.print(f"Hello, [bold blue]{name}[/bold blue]!")
-

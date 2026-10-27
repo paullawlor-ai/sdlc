@@ -14,7 +14,8 @@ sdlc_artifacts/STATE.md is typically at the project root (one level above `sdlc/
 
 If sdlc_artifacts/STATE.md does not exist, do a minimal fallback scan:
 - Count files in `sdlc_artifacts/changes/` by status (grep for `**Status**:`)
-- Count ADRs in `sdlc_artifacts/decisions/proposed/` and `accepted/`
+- Count only ADRs whose canonical status is `Proposed` or `Accepted`; ignore
+  Draft files even when they are stored in `decisions/proposed/`
 - Note that sdlc_artifacts/STATE.md is missing
 
 ### Step 2: Report

@@ -5,6 +5,7 @@ __pycache__/
 
 # Local Python environments and tool caches
 .venv/
+.quality-venv/
 venv/
 env/
 ENV/
@@ -30,6 +31,14 @@ dist/
 
 # Local script verification output
 .tmp-script-artifacts/
+.sdlc-backups/
+sdlc_artifacts/.sdlc/backups/
+*.sdlc-tmp
+.sdlc-write-*
+
+# Local project notes
+/sdlc_artifacts/private/
+/sdlc_artifacts/tmp/
 
 # Logs and temporary files
 *.log

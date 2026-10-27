@@ -16,7 +16,7 @@ Reference materials for security guidelines and SDLC processes.
 These catalogs are referenced by:
 - Agent definitions (for security review)
 - Change proposals (for OWASP mapping)
-- Cursor rules (for automatic context)
+- Assistant instructions (loaded when the current task needs detailed references)
 
 ## Updating
 
